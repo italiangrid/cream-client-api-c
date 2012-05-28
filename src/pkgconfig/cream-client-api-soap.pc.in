@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=@CMAKE_INSTALL_PREFIX@
+libdir=@CMAKE_INSTALL_PREFIX@/lib
+includedir=@CMAKE_INSTALL_PREFIX@/include
+
+Name: cream client api
+Description: C/C++ APIs for CREAM UI
+Version: @PVER@
+Libs: -L${libdir} -lglite_ce_cream_client_soap
+Cflags: -I${includedir} -I${includedir}/glite/ce
+

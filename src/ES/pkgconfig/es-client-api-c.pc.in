@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=@CMAKE_INSTALL_PREFIX@
+libdir=@CMAKE_INSTALL_PREFIX@/lib
+includedir=@CMAKE_INSTALL_PREFIX@/include
+
+Name: ES client api c
+Description: C/C++ APIs for CREAM ES
+Version: @PVER@
+Libs: -L${libdir} -lglite_ce_es_client
+Cflags: -I${includedir}
+

@@ -1,0 +1,22 @@
+xsd__int        = | int
+xsd__nonNegativeInteger =| int;
+xsd__integer =| int;
+
+OGFGLUE2SCHEMA = http://schemas.ogf.org/glue/2009/03/spec/2/0
+ESACTIVITY = http://www.eu-emi.eu/es/2010/12/activity
+ESACTIVITYMANAGEMENT = http://www.eu-emi.eu/es/2010/12/activitymanagement
+ESADL = http://www.eu-emi.eu/es/2010/12/adl
+ESCREATION = http://www.eu-emi.eu/es/2010/12/creation
+ESDELEGATION = http://www.eu-emi.eu/es/2010/12/delegation
+ESRESOURCEINFO = http://www.eu-emi.eu/es/2010/12/resourceinfo
+ESTYPES = http://www.eu-emi.eu/es/2010/12/types
+
+ESDELEGATIONTYPES = http://www.eu-emi.eu/es/2010/12/delegation/types
+
+xmlschema = http://www.w3.org/2001/XMLSchema
+wsdlschemasoap = http://schemas.xmlsoap.org/wsdl/soap/
+
+ESCREATIONTYPES = http://www.eu-emi.eu/es/2010/12/creation/types
+ESACTIVITYTYPES = http://www.eu-emi.eu/es/2010/12/activity/types
+ESACTIVITYMANAGEMENTTYPES = http://www.eu-emi.eu/es/2010/12/activitymanagement/types
+ESRESOURCEINFOTYPES = http://www.eu-emi.eu/es/2010/12/resourceinfo/types
