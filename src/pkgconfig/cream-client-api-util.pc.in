@@ -1,7 +1,7 @@
-prefix=@CMAKE_INSTALL_PREFIX@
-exec_prefix=@CMAKE_INSTALL_PREFIX@
-libdir=@CMAKE_INSTALL_PREFIX@/lib
-includedir=@CMAKE_INSTALL_PREFIX@/include
+prefix=@CMAKE_INSTALL_PREFIX@/usr
+exec_prefix=@CMAKE_INSTALL_PREFIX@/usr
+libdir=@CMAKE_INSTALL_PREFIX@/usr/lib
+includedir=@CMAKE_INSTALL_PREFIX@/usr/include
 
 Name: cream client api
 Description: C/C++ APIs for CREAM UI
