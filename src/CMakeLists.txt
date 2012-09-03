@@ -109,9 +109,14 @@ target_link_libraries(glite_ce_cream_client_util ${CLASSAD_LIBRARIES}
                                                  ${Boost_LIBRARIES})
 
 install(TARGETS glite_ce_cream_client_soap glite_ce_cream_client_util
-        LIBRARY DESTINATION usr/lib)
+        LIBRARY DESTINATION usr/${LIBSUBDIR})
 
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${AUTODIR}/glite/ce/cream-client-api-c/
         DESTINATION usr/include/glite/ce/cream-client-api-c
         FILES_MATCHING PATTERN "*.h")
+        
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${AUTODIR}/glite/ce/cream-client-api-c/
+        DESTINATION usr/include/glite/ce/cream-client-api-c
+        FILES_MATCHING PATTERN "*.nsmap")
+
       

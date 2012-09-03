@@ -29,6 +29,14 @@ if(NOT DEFINED PVER)
     set(PVER "9.9.9")
 endif(NOT DEFINED PVER)
 
+if( IS_DIRECTORY "/usr/lib64" )
+    set(BOOST_ROOT "/usr")
+    set(BOOST_LIBRARYDIR "/usr/lib64")
+    set(LIBSUBDIR "lib64")
+else( IS_DIRECTORY "/usr/lib64" )
+    set(LIBSUBDIR "lib")
+endif( IS_DIRECTORY "/usr/lib64" )
+
 set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall")
 set(AUTODIR "autogen")
 

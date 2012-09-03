@@ -155,9 +155,13 @@ target_link_libraries(glite_ce_es_client ${CLASSAD_LIBRARIES}
 
 
 install(TARGETS glite_ce_es_client
-        LIBRARY DESTINATION usr/lib)
+        LIBRARY DESTINATION usr/${LIBSUBDIR})
 
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${AUTODIR}/glite/ce/es-client-api-c/
         DESTINATION usr/include/glite/ce/es-client-api-c
         FILES_MATCHING PATTERN "*.h")
+
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${AUTODIR}/glite/ce/es-client-api-c/
+        DESTINATION usr/include/glite/ce/es-client-api-c
+        FILES_MATCHING PATTERN "*.nsmap")
 
