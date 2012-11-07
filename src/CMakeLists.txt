@@ -18,7 +18,6 @@
 #  
 
 add_subdirectory(pkgconfig)
-add_subdirectory(ES)
 
 link_directories(${VOMS_LIBRARY_DIRS}
                  ${GSOAP_LIBRARY_DIRS}

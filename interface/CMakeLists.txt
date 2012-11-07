@@ -22,8 +22,8 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/glite/ce/cream-client-api-c/
         FILES_MATCHING PATTERN "*.h"
         PATTERN "CMakeFiles" EXCLUDE)
 
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/glite/ce/es-client-api-c/
-        DESTINATION usr/include/glite/ce/es-client-api-c
-        FILES_MATCHING PATTERN "*.h"
-        PATTERN "CMakeFiles" EXCLUDE)
+#install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/glite/ce/es-client-api-c/
+#        DESTINATION usr/include/glite/ce/es-client-api-c
+#        FILES_MATCHING PATTERN "*.h"
+#        PATTERN "CMakeFiles" EXCLUDE)
 
