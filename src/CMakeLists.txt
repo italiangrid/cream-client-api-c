@@ -28,6 +28,7 @@ include_directories(${CLASSAD_INCLUDE_DIRS}
                     ${GSOAP_INCLUDE_DIRS}
                     ${LOG4CPP_INCLUDE_DIRS}
                     ${Boost_INCLUDE_DIRS}
+                    ${GLOBUS_GSSAPI_GSI_INCLUDE_DIRS}
                     ${PROJECT_SOURCE_DIR}/interface
                     ${CMAKE_CURRENT_BINARY_DIR}/${AUTODIR})
 
