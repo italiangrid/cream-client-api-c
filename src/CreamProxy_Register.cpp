@@ -149,7 +149,7 @@ void CreamProxy_Register::execute(const string& serviceURL, const bool ignore_ta
       
     } else {
     
-    m_target->clear();
+    //m_target->clear();
     processorRegisterResult _processorResult(m_target);
     
     for_each( RESP.result.begin(), RESP.result.end(), _processorResult);

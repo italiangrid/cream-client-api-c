@@ -171,7 +171,7 @@ void CreamProxy_Status::execute( const string& serviceAddress, const bool ignore
       
     } else {
     
-    m_target->clear();
+    //m_target->clear();
     processorStatusResult _processorResult(m_target);
     
     for_each( resp.result.begin(), resp.result.end(), _processorResult);

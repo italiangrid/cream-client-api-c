@@ -165,7 +165,7 @@ void CreamProxy_Info::execute( const string& serviceAddress, const bool ignore_t
         ExceptionFactory::raiseException(m_soap, ignore_tag_mismatch);
         
     } else {        
-        m_target->clear();
+        //m_target->clear();
         processorInfoResult proc(m_target);    
         for ( std::vector< CREAMTYPES__JobInfoResult* >::const_iterator it = resp.result.begin(); it != resp.result.end(); ++it ) {
             try {               
