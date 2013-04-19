@@ -20,48 +20,26 @@
 project(cream-client-api-c CXX)
 cmake_minimum_required(VERSION 2.6)
 
-if(NOT DEFINED WSDL_PATH)
-    message(FATAL_ERROR "Missing wsdl path, please specify -DWSDL_PATH:string definition")
-endif(NOT DEFINED WSDL_PATH)
+set(PKGNAME glite-ce-cream-client-api-c)
+set(PKGVER 1.15.2)
+set(PKGREL 1)
 
-if(NOT DEFINED PVER)
-    message(WARNING "Undefined version number, selected 9.9.9")
-    set(PVER "9.9.9")
-endif(NOT DEFINED PVER)
+set(ITEMS_FOR_SOURCE CMakeLists.txt interface src)
 
-if( ${CMAKE_VERSION} VERSION_LESS "2.8.2" )
-    if( IS_DIRECTORY "/usr/lib64" )
-        set(LIBSUBDIR "lib64")
-    else( IS_DIRECTORY "/usr/lib64" )
-        set(LIBSUBDIR "lib")
-    endif( IS_DIRECTORY "/usr/lib64" )
-else( ${CMAKE_VERSION} VERSION_LESS "2.8.2" )
-    if( IS_DIRECTORY "/usr/lib64" AND NOT IS_SYMLINK "/usr/lib64" )
-        set(LIBSUBDIR "lib64")
-    else( IS_DIRECTORY "/usr/lib64" AND NOT IS_SYMLINK "/usr/lib64" )
-        set(LIBSUBDIR "lib")
-    endif( IS_DIRECTORY "/usr/lib64" AND NOT IS_SYMLINK "/usr/lib64" )
-endif( ${CMAKE_VERSION} VERSION_LESS "2.8.2" )
+add_custom_target(rpm 
+                  COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild/BUILD
+                                   ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild/RPMS
+                                   ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild/SOURCES
+                                   ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild/SPECS
+                                   ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild/SRPMS
+                  COMMAND tar -zcf ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild/SOURCES/${PKGNAME}.tar.gz ${ITEMS_FOR_SOURCE}
+                  COMMAND sed -e 's|@PKGVERSION@|${PKGVER}|g'
+                              -e 's|@PKGRELEASE@|${PKGREL}|g' 
+                              project/${PKGNAME}.spec.in > ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild/SPECS/${PKGNAME}.spec
+                  COMMAND rpmbuild -ba --define '_topdir ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild'
+                          ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild/SPECS/${PKGNAME}.spec
+                  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
-if( NOT DEFINED BOOST_LIBRARYDIR AND IS_DIRECTORY "/usr/lib64" )
-    set(BOOST_LIBRARYDIR "/usr/lib64")
-endif( NOT DEFINED BOOST_LIBRARYDIR AND IS_DIRECTORY "/usr/lib64" )
-
-set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall")
-set(AUTODIR "autogen")
-
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(GSOAP gsoapssl++)
-pkg_check_modules(LOG4CPP log4cpp)
-pkg_check_modules(VOMS voms-2.0)
-pkg_check_modules(GRIDSITE_OPENSSL emi-gridsite-openssl)
-pkg_check_modules(CLASSAD emi-classad-ns)
-pkg_check_modules(GLOBUS_GSSAPI_GSI globus-gssapi-gsi)
-
-set(Boost_USE_MULTITHREADED ON)
-find_package( Boost COMPONENTS date_time filesystem regex thread)
-
-add_definitions( -pipe -DWANT_NAMESPACES -DWANT_CLASSAD_NAMESPACE )
 
 add_subdirectory(src)
 add_subdirectory(interface)

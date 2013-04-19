@@ -19,6 +19,45 @@
 
 add_subdirectory(pkgconfig)
 
+if(NOT DEFINED WSDL_PATH)
+    message("Undefined variable WSDL_PATH, used /usr/share/wsdl/cream-ce")
+    set(WSDL_PATH /usr/share/wsdl/cream-ce)
+endif(NOT DEFINED WSDL_PATH)
+
+if( ${CMAKE_VERSION} VERSION_LESS "2.8.2" )
+    if( IS_DIRECTORY "/usr/lib64" )
+        set(LIBSUBDIR "lib64")
+    else( IS_DIRECTORY "/usr/lib64" )
+        set(LIBSUBDIR "lib")
+    endif( IS_DIRECTORY "/usr/lib64" )
+else( ${CMAKE_VERSION} VERSION_LESS "2.8.2" )
+    if( IS_DIRECTORY "/usr/lib64" AND NOT IS_SYMLINK "/usr/lib64" )
+        set(LIBSUBDIR "lib64")
+    else( IS_DIRECTORY "/usr/lib64" AND NOT IS_SYMLINK "/usr/lib64" )
+        set(LIBSUBDIR "lib")
+    endif( IS_DIRECTORY "/usr/lib64" AND NOT IS_SYMLINK "/usr/lib64" )
+endif( ${CMAKE_VERSION} VERSION_LESS "2.8.2" )
+
+if( NOT DEFINED BOOST_LIBRARYDIR AND IS_DIRECTORY "/usr/lib64" )
+    set(BOOST_LIBRARYDIR "/usr/lib64")
+endif( NOT DEFINED BOOST_LIBRARYDIR AND IS_DIRECTORY "/usr/lib64" )
+
+set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall")
+set(AUTODIR "autogen")
+
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GSOAP gsoapssl++)
+pkg_check_modules(LOG4CPP log4cpp)
+pkg_check_modules(VOMS voms-2.0)
+pkg_check_modules(GRIDSITE_OPENSSL emi-gridsite-openssl)
+pkg_check_modules(CLASSAD emi-classad-ns)
+pkg_check_modules(GLOBUS_GSSAPI_GSI globus-gssapi-gsi)
+
+set(Boost_USE_MULTITHREADED ON)
+find_package( Boost COMPONENTS date_time filesystem regex thread)
+
+add_definitions( -pipe -DWANT_NAMESPACES -DWANT_CLASSAD_NAMESPACE )
+
 link_directories(${VOMS_LIBRARY_DIRS}
                  ${GSOAP_LIBRARY_DIRS}
                  ${GRIDSITE_OPENSSL_LIBRARY_DIRS})
