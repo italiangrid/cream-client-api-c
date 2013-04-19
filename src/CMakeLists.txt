@@ -17,8 +17,6 @@
 #  limitations under the License.
 #  
 
-add_subdirectory(pkgconfig)
-
 if(NOT DEFINED WSDL_PATH)
     message("Undefined variable WSDL_PATH, used /usr/share/wsdl/cream-ce")
     set(WSDL_PATH /usr/share/wsdl/cream-ce)
@@ -158,4 +156,5 @@ install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${AUTODIR}/glite/ce/cream-client-a
         DESTINATION usr/include/glite/ce/cream-client-api-c
         FILES_MATCHING PATTERN "*.nsmap")
 
+add_subdirectory(pkgconfig)
       
