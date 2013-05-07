@@ -20,29 +20,25 @@
 project(cream-client-api-c CXX)
 cmake_minimum_required(VERSION 2.6)
 
-if(NOT DEFINED WSDL_PATH)
-    message(FATAL_ERROR "Missing wsdl path, please specify -DWSDL_PATH:string definition")
-endif(NOT DEFINED WSDL_PATH)
+set(PKGNAME glite-ce-cream-client-api-c)
+set(PKGVER 1.14.3)
+set(PKGREL 1)
 
-if(NOT DEFINED PVER)
-    message(WARNING "Undefined version number, selected 9.9.9")
-    set(PVER "9.9.9")
-endif(NOT DEFINED PVER)
+set(ITEMS_FOR_SOURCE CMakeLists.txt interface src)
 
-set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall")
-set(AUTODIR "autogen")
-
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(GSOAP gsoapssl++)
-pkg_check_modules(LOG4CPP log4cpp)
-pkg_check_modules(VOMS voms-2.0)
-pkg_check_modules(GRIDSITE_OPENSSL emi-gridsite-openssl)
-pkg_check_modules(CLASSAD emi-classad-ns)
-
-set(Boost_USE_MULTITHREADED ON)
-find_package( Boost COMPONENTS date_time filesystem regex thread)
-
-add_definitions( -pipe -DWANT_NAMESPACES -DWANT_CLASSAD_NAMESPACE )
+add_custom_target(rpm 
+                  COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild/BUILD
+                                   ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild/RPMS
+                                   ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild/SOURCES
+                                   ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild/SPECS
+                                   ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild/SRPMS
+                  COMMAND tar -zcf ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild/SOURCES/${PKGNAME}.tar.gz ${ITEMS_FOR_SOURCE}
+                  COMMAND sed -e 's|@PKGVERSION@|${PKGVER}|g'
+                              -e 's|@PKGRELEASE@|${PKGREL}|g' 
+                              project/${PKGNAME}.spec.in > ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild/SPECS/${PKGNAME}.spec
+                  COMMAND rpmbuild -ba --define '_topdir ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild'
+                          ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild/SPECS/${PKGNAME}.spec
+                  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_subdirectory(src)
 add_subdirectory(interface)
