@@ -1,10 +1,10 @@
 #include "glite/ce/es-client-api-c/DeserializeActivityIdentification.h"
 #include "glite/ce/es-client-api-c/CreateActivityDescriptionFromXML.h"
-#include "glite/ce/es-client-api-c/ActivityIdentification.h"
+#include "glite/ce/es-client-api-c/WActivityIdentification.h"
 #include "glite/ce/es-client-api-c/DeserializeApplication.h"
 #include "glite/ce/es-client-api-c/DeserializeDataStaging.h"
 #include "glite/ce/es-client-api-c/DeserializeResources.h"
-#include "glite/ce/es-client-api-c/ActivityDescription.h"
+#include "glite/ce/es-client-api-c/WActivityDescription.h"
 #include "glite/ce/es-client-api-c/XMLGetNodeCount.h"
 #include "glite/ce/es-client-api-c/XMLDoc.h"
 
@@ -28,7 +28,7 @@ namespace wrapper = emi_es::client::wrapper;
  *
  */
 void
-client::CreateActivityDescriptionFromXML::create( const string& file, vector< pair<wrapper::ActivityDescription*, string> >& target ) throw(string)
+client::CreateActivityDescriptionFromXML::create( const string& file, vector< pair<wrapper::WActivityDescription*, string> >& target ) throw(string)
 {
   if(!boost::filesystem::exists(file))
     throw string("File ") + file + " does not exist";
@@ -54,24 +54,24 @@ client::CreateActivityDescriptionFromXML::create( const string& file, vector< pa
     
   for( int k = 1; k <= actCount; ++k )
   {
-    wrapper::Application* app = client::xml::DeserializeApplication::get( &doc, k );
-    boost::scoped_ptr< wrapper::Application > app_safe_ptr( app );
+    wrapper::WApplication* app = client::xml::DeserializeApplication::get( &doc, k );
+    boost::scoped_ptr< wrapper::WApplication > app_safe_ptr( app );
 
     if(!app) {
-      target.push_back( make_pair( (wrapper::ActivityDescription*)0, string("Missing <Application> tag in ActivityDescription #")+boost::lexical_cast<string>(k) ));
+      target.push_back( make_pair( (wrapper::WActivityDescription*)0, string("Missing <Application> tag in ActivityDescription #")+boost::lexical_cast<string>(k) ));
       continue;
     } else {
     
-      wrapper::ActivityIdentification* ai = client::xml::DeserializeActivityIdentification::get( &doc, k );
-      boost::scoped_ptr< wrapper::ActivityIdentification > ai_safe_ptr( ai );
+      wrapper::WActivityIdentification* ai = client::xml::DeserializeActivityIdentification::get( &doc, k );
+      boost::scoped_ptr< wrapper::WActivityIdentification > ai_safe_ptr( ai );
       
-      wrapper::DataStaging* DS = client::xml::DeserializeDataStaging::get( &doc, k );
-      boost::scoped_ptr< wrapper::DataStaging > app_safe_ptr( DS );
+      wrapper::WDataStaging* DS = client::xml::DeserializeDataStaging::get( &doc, k );
+      boost::scoped_ptr< wrapper::WDataStaging > app_safe_ptr( DS );
 
-      wrapper::Resources* R = client::xml::DeserializeResources::get( &doc, 1 );
-      boost::scoped_ptr< wrapper::Resources > res_safe_ptr( R );
+      wrapper::WResources* R = client::xml::DeserializeResources::get( &doc, 1 );
+      boost::scoped_ptr< wrapper::WResources > res_safe_ptr( R );
 
-      wrapper::ActivityDescription* ad = new wrapper::ActivityDescription( ai, *app, R, DS );
+      wrapper::WActivityDescription* ad = new wrapper::WActivityDescription( ai, app, R, DS );
       target.push_back( make_pair( ad, "" ) );
     }
     
@@ -88,10 +88,10 @@ client::CreateActivityDescriptionFromXML::create( const string& file, vector< pa
  *
  */
 void
-client::CreateActivityDescriptionFromXML::free( vector< pair<wrapper::ActivityDescription*, string> >& toFree ) {
-  vector<pair< wrapper::ActivityDescription*, string> >::const_iterator it = toFree.begin();
+client::CreateActivityDescriptionFromXML::free( vector< pair<wrapper::WActivityDescription*, string> >& toFree ) {
+  vector<pair< wrapper::WActivityDescription*, string> >::const_iterator it = toFree.begin();
   for( ; it != toFree.end(); ++it ) {
-    wrapper::ActivityDescription* current = it->first;
+    wrapper::WActivityDescription* current = it->first;
     delete current;
   }
 }

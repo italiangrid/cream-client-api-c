@@ -4,11 +4,12 @@
 #include "glite/ce/es-client-api-c/XMLGetNodeContent.h"
 #include "glite/ce/es-client-api-c/XMLGetMultipleNodeContent.h"
 
-#include "glite/ce/es-client-api-c/ActivityIdentification.h"
+#include "glite/ce/es-client-api-c/WActivityIdentification.h"
 
 #include <vector>
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/algorithm/string.hpp>
 
 using namespace std;
 namespace xml = emi_es::client::xml;
@@ -23,7 +24,7 @@ namespace wrapper = emi_es::client::wrapper;
  *
  *
  */
-wrapper::ActivityIdentification*
+wrapper::WActivityIdentification*
 xml::DeserializeActivityIdentification::get( XMLDoc* doc, const int adIndex )
 {
   string *Name = 0, *Description = 0, *Type = 0;
@@ -70,23 +71,29 @@ xml::DeserializeActivityIdentification::get( XMLDoc* doc, const int adIndex )
   sprintf( buf, "//ActivityDescription[%d]/ActivityIdentification/Annotation", adIndex );
   XMLGetMultipleNodeContent::get( doc, Annotation, buf );
 
-  wrapper::ActivityIdentification::ACTIVITYTYPE _type;
+  ActivityTypeEnumeration *_type = 0;
   if(Type) {
-    if(*Type == "collectionelement" )
-      _type = wrapper::ActivityIdentification::ACTIVITYTYPE_COLLECTIONELEMENT;
+    _type = new ActivityTypeEnumeration();
+    *_type = (ActivityTypeEnumeration)UNKNOWN;
+    if( boost::iequals(*Type, "collectionelement") )
+      *_type = ACTIVITYTYPE_COLLECTIONELEMENT;
     
-    if(*Type == "parallelelement" )
-      _type = wrapper::ActivityIdentification::ACTIVITYTYPE_PARALLELELEMENT;
+    if( boost::iequals(*Type, "parallelelement") )
+      *_type = ACTIVITYTYPE_PARALLELELEMENT;
     
-    if(*Type == "single" )
-      _type = wrapper::ActivityIdentification::ACTIVITYTYPE_SINGLE;
+    if( boost::iequals(*Type, "single") )
+      *_type = ACTIVITYTYPE_SINGLE;
     
-    if(*Type == "workflownode" )
-      _type = wrapper::ActivityIdentification::ACTIVITYTYPE_WORKFLOWNODE;
+    if( boost::iequals(*Type, "workflownode") )
+      *_type = ACTIVITYTYPE_WORKFLOWNODE;
   }
   
-  return new wrapper::ActivityIdentification( (Name? *Name : ""), 
-					      (Description ? *Description : ""), 
-					      _type, 
-					      Annotation );
+  wrapper::WActivityIdentification* ai 
+       = new wrapper::WActivityIdentification( Name, 
+					       Description, 
+					       _type, 
+					       Annotation );
+  delete _type;
+  return ai;
+					       
 }

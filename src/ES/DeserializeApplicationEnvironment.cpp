@@ -7,8 +7,6 @@
 
 using namespace std;
 namespace xml = emi_es::client::xml;
-//namespace wrapper = emi_es::client::wrapper;
-
 
 /**
  *

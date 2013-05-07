@@ -3,7 +3,7 @@
 #include "glite/ce/es-client-api-c/XMLGetNodeCount.h"
 #include "glite/ce/es-client-api-c/XMLGetNodeContent.h"
 #include "glite/ce/es-client-api-c/XMLGetMultipleNodeContent.h"
-#include "glite/ce/es-client-api-c/ExecutableType.h"
+#include "glite/ce/es-client-api-c/WExecutable.h"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -19,7 +19,7 @@ namespace wrapper = emi_es::client::wrapper;
  *
  *
  */
-wrapper::ExecutableType*
+wrapper::WExecutable*
 xml::DeserializeApplicationExecutable::get( XMLDoc* doc, const int adIndex )
 {
 
@@ -58,8 +58,8 @@ xml::DeserializeApplicationExecutable::get( XMLDoc* doc, const int adIndex )
 
   if(failifnoteq) {
     int f = atoi(failifnoteq->c_str());
-    return new wrapper::ExecutableType( *path, args, f );
+    return new wrapper::WExecutable( *path, args, &f );
   }
   else
-    return new wrapper::ExecutableType( *path, args );
+    return new wrapper::WExecutable( *path, args, 0 );
 }

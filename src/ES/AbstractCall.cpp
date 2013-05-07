@@ -1,16 +1,55 @@
 #include "glite/ce/es-client-api-c/AbstractCall.h"
 #include "glite/ce/es-client-api-c/CreateActivityCall.h"
+#include "glite/ce/es-client-api-c/WInternalBaseFault.h"
 
-#include "ES_CLIENT.nsmap"
+#include <stdsoap2.h>
+#include "autogen/ES_CLIENT.nsmap"
 
 #include <boost/lexical_cast.hpp>
+
+#include <cstring>
 
 using namespace std;
 
 namespace comm = emi_es::client::comm;
+namespace wrapper = emi_es::client::wrapper;
 
+char* comm::AbstractCall::s_global_buf = 0;//("");
+
+//extern "C" {
+  //extern static size_t glite_gsplugin_recv(struct soap*, char*, size_t );
+// #undef IOV_MAX
+// #include "glite/security/glite_gsplugin.h"
+// //#include "glite/security/glite_gsplugin-int.h"
+// //#include "glite/security/glite_gsplugin.h"
+//};
+/*
+size_t
+pre_gsplugin_recv(struct soap *S, char *B, size_t bufsz) {
+  //int bufsz = 0;
+  //memset((void*)B, 0, bufsz);
+  size_t len = glite_gsplugin_recv( S, B, bufsz );
+  cout << endl << "SOAP->BUF=[" << S->buf << "]" <<endl<<endl;
+  if(comm::AbstractCall::s_global_buf!=0)
+    free(comm::AbstractCall::s_global_buf);
+  comm::AbstractCall::s_global_buf = (char*)malloc(len+1);
+  memset((void*)comm::AbstractCall::s_global_buf, 0, len+1);
+  memcpy((void*)comm::AbstractCall::s_global_buf, B, len);
+//  comm::AbstractCall::s_global_buf = string(_B);
+  return len;
+}
+*/
+/*
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 void
-get_string_error( string& error, InternalBaseFaultType* );
+get_string_error( string& error, wrapper::WInternalBaseFault* );
 
 /**
  *
@@ -44,7 +83,6 @@ comm::AbstractCall::init_credentials( const string& cert,
 				      string& error ) 
 {
   if(!m_SOAP) {
-    
     error = "SOAP runtime environment not initialized; init_soap must be called first";
     return false;
   }
@@ -62,7 +100,11 @@ comm::AbstractCall::init_credentials( const string& cert,
     m_key_file = key;
 
   int retcode = 0;
-  retcode = glite_gsplugin_init_context( &m_gsoap_plugin_context );
+
+  if(::getenv("NOAUTH"))
+    return true;
+  
+  retcode = ::glite_gsplugin_init_context( &m_gsoap_plugin_context );
   if( retcode ) 
     {
       m_gsoap_plugin_context = 0;
@@ -76,12 +118,6 @@ comm::AbstractCall::init_credentials( const string& cert,
     return false;
   }
 
-  //cout << "m_certificate_file.c_str()=" << m_certificate_file.c_str() << endl;
-  //cout << "m_key_file.c_str()=" << m_key_file.c_str() << endl;
-//   ::unsetenv("X509_USER_CERT");
-//   ::unsetenv("X509_USER_KEY");
-//   ::setenv("X509_USER_CERT", m_certificate_file.c_str(), 0);
-//   ::setenv("X509_USER_KEY", m_key_file.c_str(), 0);
   if (glite_gsplugin_set_credential( m_gsoap_plugin_context, 
 				     m_certificate_file.c_str(), 
 				     m_key_file.c_str() )) 
@@ -97,6 +133,12 @@ comm::AbstractCall::init_credentials( const string& cert,
   T.tv_usec = 0;
   
   glite_gsplugin_set_timeout( m_gsoap_plugin_context, &T );
+
+//   char *B;
+//   glite_gsplugin_recv( m_SOAP, B, 0 );
+
+  //m_SOAP->frecv = pre_gsplugin_recv;
+
   return true;
 }
 
@@ -173,6 +215,8 @@ comm::AbstractCall::~AbstractCall( ) throw()
     free( m_SOAP );
     m_SOAP = 0;
   }
+  if(s_global_buf!=0)
+    free(s_global_buf);
 }
 
 /*
@@ -185,7 +229,7 @@ comm::AbstractCall::~AbstractCall( ) throw()
  *
  */
 void
-comm::AbstractCall::process_error( string& error, enum comm::AbstractCall::SOAP_CALL_ERROR_CODES& code )
+comm::AbstractCall::process_error( string& error )//, enum comm::AbstractCall::SOAP_CALL_ERROR_CODES& code )
 {
   int soaperr = m_SOAP->error;
 
@@ -204,7 +248,7 @@ comm::AbstractCall::process_error( string& error, enum comm::AbstractCall::SOAP_
    */
   if(soaperr == SOAP_EOF) {
     error = "SOAP connection timeout or peer closed socket connection prematurely";
-    code = SOAP_CALL_ERROR_TIMEOUT;
+    //code = SOAP_CALL_ERROR_TIMEOUT;
     return;
   }
 
@@ -247,7 +291,7 @@ comm::AbstractCall::process_error( string& error, enum comm::AbstractCall::SOAP_
        else
 	 error += " FaultDetail=[]";
 
-      code  = SOAP_CALL_ERROR_CONNECT;
+      //code  = SOAP_CALL_ERROR_CONNECT;
       return;
     }
 
@@ -314,7 +358,7 @@ comm::AbstractCall::process_error( string& error, enum comm::AbstractCall::SOAP_
     else
       error += " FaultDetail=[]";
 
-    code = SOAP_CALL_ERROR_UNKNOWNFAULT;
+    //code = SOAP_CALL_ERROR_UNKNOWNFAULT;
     return;
   }
 
@@ -326,141 +370,141 @@ comm::AbstractCall::process_error( string& error, enum comm::AbstractCall::SOAP_
    */
   
 
-  if( type == SOAP_CALL_ERROR_VECTORLIMITEXCEEDED ) {
-    code = SOAP_CALL_ERROR_VECTORLIMITEXCEEDED;
-    get_string_error( error, (InternalBaseFaultType*)fault );
+  if( type == VECTORLIMITEXCEEDED ) {
+    //code = SOAP_CALL_ERROR_VECTORLIMITEXCEEDED;
+    get_string_error( error, (InternalBaseFault*)fault );
     error += string(" ServerLimit=[") 
-      + boost::lexical_cast<string>(((VectorLimitExceededFaultType*)fault)->ServerLimit) 
+      + boost::lexical_cast<string>(((VectorLimitExceededFault*)fault)->ServerLimit) 
       + "]";
     return;
   }
-  if(type==SOAP_CALL_ERROR_INTERNALBASEFAULT) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (InternalBaseFaultType*)fault );
+  if(type==INTERNALBASE) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (InternalBaseFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_UNSUPPORTEDCAPABILITY) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (UnsupportedCapabilityFaultType*)fault );
+  if(type==UNSUPPORTEDCAPABILITY) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (UnsupportedCapabilityFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_INVALIDACTIVITYDESCSEMANTIC) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (InvalidActivityDescriptionSemanticFaultType*)fault );
+  if(type==INVALIDACTIVITYDESCRIPTIONSEMANTIC) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (InvalidActivityDescriptionSemanticFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_INVALIDACTIVITYDESC) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (InvalidActivityDescriptionFaultType*)fault );
+  if(type==INVALIDACTIVITYDESCRIPTION) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (InvalidActivityDescriptionFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_VECTORLIMITEXCEEDED) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (VectorLimitExceededFaultType*)fault );
+//   if(type==VECTORLIMITEXCEEDED) {
+//     //code = (SOAP_CALL_ERROR_CODES)type;
+//     get_string_error( error, (VectorLimitExceededFaultType*)fault );
+//     return;
+//   }
+  if(type==ACCESSCONTROL) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (AccessControlFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_ACCESSCONTROL) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (AccessControlFaultType*)fault );
+  if(type==INVALIDACTIVITYID) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (InvalidActivityIDFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_INVALIDACTIVITYID) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (InvalidActivityIDFaultType*)fault );
+  if(type==UNKNOWNACTIVITYID) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (UnknownActivityIDFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_UNKNOWNACTIVITYID) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (UnknownActivityIDFaultType*)fault );
+  if(type==UNABLETORETRIEVESTATUS) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (UnableToRetrieveStatusFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_UNABLERETRIEVESTATUS) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (UnableToRetrieveStatusFaultType*)fault );
+//   if(type==UNKNOWNGLUE2ACTIVITYATTR) {
+//     //code = (SOAP_CALL_ERROR_CODES)type;
+//     get_string_error( error, (UnknownGlue2ActivityAttributeFault*)fault );
+//     return;
+//   }
+  if(type==OPERATIONNOTALLOWED) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (OperationNotAllowedFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_UNKNOWNGLUE2ACTIVITYATTR) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (UnknownGlue2ActivityAttributeFaultType*)fault );
+  if(type==ACTIVITYNOTFOUND) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (ActivityNotFoundFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_OPERATIONNOTALLOWED) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (OperationNotAllowedFaultType*)fault );
+  if(type==INTERNALNOTIFICATION) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (InternalNotificationFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_ACTIVITYNOTFOUND) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (ActivityNotFoundFaultType*)fault );
+  if(type==OPERATIONNOTPOSSIBLE) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (OperationNotPossibleFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_INTERNALNOTIF) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (InternalNotificationFaultType*)fault );
+  if(type==INVALIDACTIVITYSTATE) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (InvalidActivityStateFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_OPERATIONNOTPOSSIBLE) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (OperationNotPossibleFaultType*)fault );
+  if(type==ACTIVITYNOTINTERMINALSTATE) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (ActivityNotInTerminalStateFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_INVALIDACTIVITYSTATE) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (InvalidActivityStateFaultType*)fault );
+  if(type==INVALIDACTIVITYLIMIT) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (InvalidActivityLimitFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_ACTIVITYNOTINTERMINALSTATE) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (ActivityNotInTerminalStateFaultType*)fault );
+  if(type==INVALIDPARAMETER) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (InvalidParameterFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_INVALIDACTIVITYLIMIT) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (InvalidActivityLimitFaultType*)fault );
+  if(type==UNKNOWNDELEGATION) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (UnknownDelegationIDFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_INVALIDPARAMETER) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (InvalidParameterFaultType*)fault );
+  if(type==INTERNALSERVICEDELEGATION) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (InternalServiceDelegationFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_UNKNOWNDELEGID) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (UnknownDelegationIDFaultType*)fault );
+  if(type==NOTSUPPORTEDQUERYDIALECT) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (NotSupportedQueryDialectFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_INTERNALSERVICEDELEG) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (InternalServiceDelegationFaultType*)fault );
+  if(type==NOTVALIDQUERYSTATEMENT) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (NotValidQueryStatementFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_NOTSUPPORTEDQUERYDIALECT) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (NotSupportedQueryDialectFaultType*)fault );
+  if(type==UNKNOWNQUERY) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (UnknownQueryFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_NOTVALIDQUERYSTATEMENT) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (NotValidQueryStatementFaultType*)fault );
+  if(type==INTERNALRESOURCEINFO) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (InternalResourceInfoFault*)fault );
     return;
   }
-  if(type==SOAP_CALL_ERROR_UNKNOWNQUERY) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (UnknownQueryFaultType*)fault );
-    return;
-  }
-  if(type==SOAP_CALL_ERROR_INTERNALRESOURCEINFO) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (InternalResourceInfoFaultType*)fault );
-    return;
-  }
-  if(type==SOAP_CALL_ERROR_RESOURCEINFONOTFOUND) {
-    code = (SOAP_CALL_ERROR_CODES)type;
-    get_string_error( error, (ResourceInfoNotFoundFaultType*)fault );
+  if(type==RESOURCEINFONOTFOUND) {
+    //code = (SOAP_CALL_ERROR_CODES)type;
+    get_string_error( error, (ResourceInfoNotFoundFault*)fault );
     return;
   }
   
-  code = SOAP_CALL_ERROR_UNKNOWNTYPE;
+  //code = SOAP_CALL_ERROR_UNKNOWNTYPE;
   
   char *pluginerr = glite_gsplugin_errdesc(m_SOAP);
   
@@ -481,7 +525,7 @@ comm::AbstractCall::process_error( string& error, enum comm::AbstractCall::SOAP_
  *
  */
 void
-comm::AbstractCall::get_string_error( string& error, InternalBaseFaultType* fault )
+comm::AbstractCall::get_string_error( string& error, InternalBaseFault* fault )
 {
   if(!fault)
     return;
@@ -505,9 +549,9 @@ comm::AbstractCall::get_string_error( string& error, InternalBaseFaultType* faul
  *
  */
 void
-comm::AbstractCall::get_string_error( string& error, const wrapper::InternalBaseFault& fault )
+comm::AbstractCall::get_string_error( string& error, const wrapper::WInternalBaseFault& fault )
 {
-  get_string_error( error, (InternalBaseFaultType*)&fault );
+  get_string_error( error, (InternalBaseFault*)&fault );
 }
 
 /*
@@ -528,10 +572,10 @@ comm::AbstractCall::check_sub_fault( soap* S, string& error ) {
 	F = S->fault->detail->ESTYPES__AccessControlFault;
       if(S->fault->detail->ESTYPES__InternalBaseFault)
 	F = S->fault->detail->ESTYPES__InternalBaseFault;
-      if(S->fault->detail->ESACTIVITYTYPES__UnknownGlue2ActivityAttributeFault)
-	F = S->fault->detail->ESACTIVITYTYPES__UnknownGlue2ActivityAttributeFault;
-      if(S->fault->detail->ESTYPES__VectorLimitExceededFault)
-	F = S->fault->detail->ESTYPES__VectorLimitExceededFault;
+//       if(S->fault->detail->ESACTIVITYTYPES__UnknownGlue2ActivityAttributeFault)
+// 	F = S->fault->detail->ESACTIVITYTYPES__UnknownGlue2ActivityAttributeFault;
+//       if(S->fault->detail->ESTYPES__VectorLimitExceededFault)
+// 	F = S->fault->detail->ESTYPES__VectorLimitExceededFault;
       if(S->fault->detail->ESACTIVITYTYPES__InvalidParameterFault)
 	F = S->fault->detail->ESACTIVITYTYPES__InvalidParameterFault;
       if(S->fault->detail->ESDELEGATIONTYPES__InternalServiceDelegationFault)
@@ -556,4 +600,19 @@ comm::AbstractCall::check_sub_fault( soap* S, string& error ) {
       return true;
     } else return false;
   } else return false;
+}
+
+/*
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+void
+comm::AbstractCall::save_soap_buffer( ) {
+  if(m_SOAP)
+    m_soap_buffer = m_SOAP->buf;
 }

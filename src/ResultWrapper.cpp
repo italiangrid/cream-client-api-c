@@ -19,6 +19,9 @@ limitations under the License.
 END LICENSE */
 
 #include <glite/ce/cream-client-api-c/ResultWrapper.h>
+#include <iostream>
+
+using namespace std;
 
 using namespace glite::ce::cream_client_api::soap_proxy;
 
@@ -30,12 +33,18 @@ void ResultWrapper::set(const std::vector<CREAMTYPES__Result * >& results) throw
     CREAMTYPES__JobId* job           = (*it)->jobId;
     std::string errMex;
     
+    ;
+
     switch((*it)->__union_Result) {
       
+//       cout << "__union_Result=" << (*it)->__union_Result << " - Result_CREAMTYPES__JobUnknownFault=" 
+// 	   << SOAP_UNION__CREAMTYPES__union_Result_CREAMTYPES__JobUnknownFault << endl;
+
       //------------------------------------------------------------
-    case SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__JobUnknownFault:
+      // SOAP_UNION__CREAMTYPES__union_Result_CREAMTYPES__JobUnknownFault
+    case SOAP_UNION__CREAMTYPES__union_Result_CREAMTYPES__JobUnknownFault:
       if( (*it)->union_Result.CREAMTYPES__JobUnknownFault )
-       errMex = ExceptionFactory::makeStringFromFault( (*it)->union_Result.CREAMTYPES__JobUnknownFault );
+	errMex = ExceptionFactory::makeStringFromFault( (*it)->union_Result.CREAMTYPES__JobUnknownFault );
       else
 	errMex = "Error Message Not Available";
       if(job)
@@ -43,9 +52,21 @@ void ResultWrapper::set(const std::vector<CREAMTYPES__Result * >& results) throw
       else
 	notExistingJobs.push_back( std::make_pair(JobIdWrapper(), errMex));
       break;
+
+      //------------------------------------------------------------
+//     case SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__JobUnknownFault:
+//       if( (*it)->union_Result.CREAMTYPES__JobUnknownFault )
+//        errMex = ExceptionFactory::makeStringFromFault( (*it)->union_Result.CREAMTYPES__JobUnknownFault );
+//       else
+// 	errMex = "Error Message Not Available";
+//       if(job)
+// 	notExistingJobs.push_back( std::make_pair(JobIdWrapper(job), errMex));
+//       else
+// 	notExistingJobs.push_back( std::make_pair(JobIdWrapper(), errMex));
+//       break;
       
       //------------------------------------------------------------
-    case SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__JobStatusInvalidFault:
+    case SOAP_UNION__CREAMTYPES__union_Result_CREAMTYPES__JobStatusInvalidFault:
       if( (*it)->union_Result.CREAMTYPES__JobStatusInvalidFault )
        errMex = ExceptionFactory::makeStringFromFault( (*it)->union_Result.CREAMTYPES__JobStatusInvalidFault);
       else
@@ -55,9 +76,21 @@ void ResultWrapper::set(const std::vector<CREAMTYPES__Result * >& results) throw
       else
 	notMatchingStatusJobs.push_back( std::make_pair(JobIdWrapper(), errMex));
       break; 
+        
+      //------------------------------------------------------------
+//     case SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__JobStatusInvalidFault:
+//       if( (*it)->union_Result.CREAMTYPES__JobStatusInvalidFault )
+//        errMex = ExceptionFactory::makeStringFromFault( (*it)->union_Result.CREAMTYPES__JobStatusInvalidFault);
+//       else
+// 	errMex = "Error Message Not Available";
+//       if(job)
+// 	notMatchingStatusJobs.push_back( std::make_pair(JobIdWrapper(job), errMex));
+//       else
+// 	notMatchingStatusJobs.push_back( std::make_pair(JobIdWrapper(), errMex));
+//       break; 
       
       //------------------------------------------------------------
-    case SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__DelegationIdMismatchFault:
+    case SOAP_UNION__CREAMTYPES__union_Result_CREAMTYPES__DelegationIdMismatchFault:
       if( (*it)->union_Result.CREAMTYPES__DelegationIdMismatchFault )
        errMex = ExceptionFactory::makeStringFromFault( (*it)->union_Result.CREAMTYPES__DelegationIdMismatchFault);
       else
@@ -69,7 +102,7 @@ void ResultWrapper::set(const std::vector<CREAMTYPES__Result * >& results) throw
       break; 
       
       //------------------------------------------------------------
-    case SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__DateMismatchFault:
+    case SOAP_UNION__CREAMTYPES__union_Result_CREAMTYPES__DateMismatchFault:
       if( (*it)->union_Result.CREAMTYPES__DateMismatchFault )
        errMex = ExceptionFactory::makeStringFromFault( (*it)->union_Result.CREAMTYPES__DateMismatchFault);
       else
@@ -81,7 +114,7 @@ void ResultWrapper::set(const std::vector<CREAMTYPES__Result * >& results) throw
       break; 
       
       //------------------------------------------------------------
-    case SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__GenericFault:
+    case SOAP_UNION__CREAMTYPES__union_Result_CREAMTYPES__GenericFault:
       if( (*it)->union_Result.CREAMTYPES__GenericFault)
        errMex = ExceptionFactory::makeStringFromFault( (*it)->union_Result.CREAMTYPES__GenericFault);
       else
@@ -93,7 +126,7 @@ void ResultWrapper::set(const std::vector<CREAMTYPES__Result * >& results) throw
       break;
       
       //------------------------------------------------------------
-    case SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__LeaseIdMismatchFault:
+    case SOAP_UNION__CREAMTYPES__union_Result_CREAMTYPES__LeaseIdMismatchFault:
       if( (*it)->union_Result.CREAMTYPES__LeaseIdMismatchFault )
        errMex = ExceptionFactory::makeStringFromFault( (*it)->union_Result.CREAMTYPES__LeaseIdMismatchFault);
       else
@@ -124,12 +157,12 @@ ResultWrapper&
 ResultWrapper::operator=( const std::vector<CREAMTYPES__Result * >& results ) throw()
 {
   //okJobs.clear();
-    notExistingJobs.clear();
-    notMatchingStatusJobs.clear();
-    notMatchingDateJobs.clear();
-    notMatchingProxyDidJobs.clear();
-    notMatchingLeaseJobs.clear();
-    
-    this->set(results);
+  notExistingJobs.clear();
+  notMatchingStatusJobs.clear();
+  notMatchingDateJobs.clear();
+  notMatchingProxyDidJobs.clear();
+  notMatchingLeaseJobs.clear();
+  
+  this->set(results);
   return *this;
 }

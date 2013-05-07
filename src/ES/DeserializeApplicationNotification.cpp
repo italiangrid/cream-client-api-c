@@ -3,7 +3,7 @@
 #include "glite/ce/es-client-api-c/XMLGetNodeCount.h"
 #include "glite/ce/es-client-api-c/XMLGetNodeContent.h"
 #include "glite/ce/es-client-api-c/XMLGetMultipleNodeContent.h"
-#include "glite/ce/es-client-api-c/ActivityStatus.h"
+#include "glite/ce/es-client-api-c/WActivityStatus.h"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -20,7 +20,7 @@ namespace wrapper = emi_es::client::wrapper;
  *
  */
 void
-xml::DeserializeApplicationNotification::get( XMLDoc* doc, vector<wrapper::Notification>& target, const int adIndex )
+xml::DeserializeApplicationNotification::get( XMLDoc* doc, vector<wrapper::WNotification>& target, const int adIndex )
 {
 
   char* buf = (char*)malloc(1024);
@@ -60,23 +60,25 @@ xml::DeserializeApplicationNotification::get( XMLDoc* doc, vector<wrapper::Notif
     string *opt = XMLGetNodeContent::get( doc, buf );
     boost::scoped_ptr< string > opt_safe_ptr( opt );
       
-    int proto = 0;
-    // here protocol is for sure not NULL because there's a check above (if(!protocol) continue;)
-    if(*protocol == "email")
-      proto = 0;
+//     int proto = 0;
+//     // here protocol is for sure not NULL because there's a check above (if(!protocol) continue;)
+//     if(*protocol == "email")
+//       proto = 0;
     
-    bool _opt = false;
-    if(opt)
-      if(*opt == "true")
-	_opt = true;
-
+    bool *_opt = 0;//false;
+    if(opt) {
+      if(*opt == "true") 
+	_opt = new bool(true);
+      else
+        _opt = new bool(false);
+    }
     vector<string>::const_iterator it = OnStates.begin();
-    vector< wrapper::ActivityStatus::ACTIVITYSTATUS > onstates;
+    vector< ActivityStatusState > onstates;
     for( ; it != OnStates.end( ); ++it ) {
-      onstates.push_back( wrapper::ActivityStatus::getStatusNumber( *it ) );
+      onstates.push_back( wrapper::WActivityStatus::getStatusNumber( *it ) );
     }
 
-    wrapper::Notification N( proto, Recipients, onstates, _opt );
+    wrapper::WNotification N( (protocol ? wrapper::WNotification::getProtoNumber( protocol->c_str() ) : (ProtocolTypeEnumeration)UNKNOWN), Recipients, onstates, _opt );
     target.push_back( N );
   }
 }

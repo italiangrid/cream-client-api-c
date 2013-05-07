@@ -20,7 +20,7 @@ namespace xml = emi_es::client::xml;
  */
 void
 xml::DeserializeResourcesOperatingSystem::get( XMLDoc* doc, 
-					       vector<wrapper::OperatingSystem>& target,
+					       vector<wrapper::WOperatingSystem>& target,
 					       const int adIndex )
 {
   char* buf = (char*)malloc(1024);
@@ -60,7 +60,7 @@ xml::DeserializeResourcesOperatingSystem::get( XMLDoc* doc,
     string* Version = XMLGetNodeContent::get( doc, buf );
     boost::scoped_ptr< string > ver_safe_ptr( Version );
 
-    wrapper::OperatingSystem op(*Name, Family, Version);
+    wrapper::WOperatingSystem op(*Name, Family, Version);
     target.push_back(op);
   }
 

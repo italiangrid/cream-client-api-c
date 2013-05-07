@@ -3,7 +3,7 @@
 #include "glite/ce/es-client-api-c/XMLGetNodeCount.h"
 #include "glite/ce/es-client-api-c/XMLGetNodeContent.h"
 #include "glite/ce/es-client-api-c/XMLGetMultipleNodeContent.h"
-#include "glite/ce/es-client-api-c/Source.h"
+#include "glite/ce/es-client-api-c/WSource.h"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -19,7 +19,7 @@ namespace wrapper = emi_es::client::wrapper;
  *
  *
  */
-wrapper::Source*
+wrapper::WSource*
 xml::DeserializeInputFileSource::get( XMLDoc* doc, const int adPos, const int ifPos, const int index )
 { 
   
@@ -65,11 +65,8 @@ xml::DeserializeInputFileSource::get( XMLDoc* doc, const int adPos, const int if
     delete value;
   }
 
-  wrapper::Source *SRC;
-  if(DID)
-    SRC = new wrapper::Source(URI, *DID, options);
-  else
-    SRC = new wrapper::Source(URI, options);
+  wrapper::WSource *SRC;
+  SRC = new wrapper::WSource(URI, DID, options);
   delete DID;
   return SRC;
 }

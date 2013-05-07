@@ -21,7 +21,7 @@ namespace wrapper = emi_es::client::wrapper;
  */
 void
 xml::DeserializeOutputFile::get( XMLDoc* doc, 
-				 vector<wrapper::OutputFile>& target,
+				 vector<wrapper::WOutputFile>& target,
 				 const int adPos )
 { 
   char* buf = (char*)malloc(1024);
@@ -40,7 +40,7 @@ xml::DeserializeOutputFile::get( XMLDoc* doc,
    *
    */
   for( int k = 1; k <= count; ++k ) {
-    vector<wrapper::Target> Targets;
+    vector<wrapper::WTarget> Targets;
     string Name;
 
     memset( (void*)buf, 0, 1024 );
@@ -63,14 +63,14 @@ xml::DeserializeOutputFile::get( XMLDoc* doc,
      */
     if(countTarget) {
       for( int j = 1; j <= countTarget; ++j ) {
-	wrapper::Target *TGT = DeserializeOutputFileTarget::get( doc, adPos, k, j );
+	wrapper::WTarget *TGT = DeserializeOutputFileTarget::get( doc, adPos, k, j );
 	if(TGT) {
 	  Targets.push_back( *TGT );
 	  delete TGT;
 	}
       }
     }
-    wrapper::OutputFile of(Name, Targets );
+    wrapper::WOutputFile of(Name, Targets );
     target.push_back(of);
   }
 }

@@ -184,16 +184,7 @@ void AbsCreamProxy::makeSoap( void ) throw(soap_ex&, soap_runtime_ex&, auth_ex&)
       }
       
 
-      ::unsetenv("X509_USER_CERT");
-      ::unsetenv("X509_USER_KEY");
-      ::setenv("X509_USER_CERT", m_certfile.c_str(), 0);
-      ::setenv("X509_USER_KEY", m_keyfile.c_str(), 0);
-      if (glite_gsplugin_set_credential( m_ctx, m_certfile.c_str(), m_keyfile.c_str())) {
-	//cerr << "Err desc: " << glite_gsplugin_errdesc( m_soap ) << endl;
-	glite_gsplugin_free_context( m_ctx );
-	m_ctx = NULL;
-	throw auth_ex("Cannot set credentials in the gsoap-plugin context");
-      }
+
       
       struct timeval T;
       T.tv_sec = (time_t)m_nbio;
@@ -215,17 +206,17 @@ void AbsCreamProxy::makeSoap( void ) throw(soap_ex&, soap_runtime_ex&, auth_ex&)
       }
     }
     
+          ::unsetenv("X509_USER_CERT");
+      ::unsetenv("X509_USER_KEY");
+      ::setenv("X509_USER_CERT", m_certfile.c_str(), 0);
+      ::setenv("X509_USER_KEY", m_keyfile.c_str(), 0);
+      if (glite_gsplugin_set_credential( m_ctx, m_certfile.c_str(), m_keyfile.c_str())) {
+	//cerr << "Err desc: " << glite_gsplugin_errdesc( m_soap ) << endl;
+	glite_gsplugin_free_context( m_ctx );
+	m_ctx = NULL;
+	throw auth_ex("Cannot set credentials in the gsoap-plugin context");
+      }
 
-    
-//    if( m_use_soap_header ) {
-      /**
-       * POSSIBLE MEM LEAK? When a response is received
-       * it seems that the field SOAP->header is set to NULL by
-       * the gSOAP runtime
-       */
-//      m_soap->header = new SOAP_ENV__Header(); // FIXME how to free this (see comment above) ?
-//      m_soap->header->CREAMTYPES__iceId = new string( m_soap_header );
-//    }
   } catch(exception& ex) {
 
     this->clearSoap();// if an exception is thrown the initSoap object is not created

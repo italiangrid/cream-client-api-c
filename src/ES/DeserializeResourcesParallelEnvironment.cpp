@@ -1,5 +1,5 @@
 #include "glite/ce/es-client-api-c/DeserializeResourcesParallelEnvironment.h"
-#include "glite/ce/es-client-api-c/ParallelEnvironment.h"
+#include "glite/ce/es-client-api-c/WParallelEnvironment.h"
 
 #include "glite/ce/es-client-api-c/XMLDoc.h"
 #include "glite/ce/es-client-api-c/XMLGetNodeCount.h"
@@ -20,7 +20,7 @@ namespace xml = emi_es::client::xml;
  *
  *
  */
-emi_es::client::wrapper::ParallelEnvironment*
+emi_es::client::wrapper::WParallelEnvironment*
 xml::DeserializeResourcesParallelEnvironment::get( XMLDoc* doc, 
 						   const int adIndex )
 {
@@ -137,7 +137,7 @@ xml::DeserializeResourcesParallelEnvironment::get( XMLDoc* doc,
     delete number;
   }
   
-  emi_es::client::wrapper::ParallelEnvironment *PE = new emi_es::client::wrapper::ParallelEnvironment( *Type, Version, pphost, tphost, opts );
+  emi_es::client::wrapper::WParallelEnvironment *PE = new emi_es::client::wrapper::WParallelEnvironment( *Type, Version, pphost, tphost, opts );
   delete pphost;
   delete tphost;
   return PE;//new emi_es::client::wrapper::ParallelEnvironment( *Type, Version, pphost, tphost, opts );

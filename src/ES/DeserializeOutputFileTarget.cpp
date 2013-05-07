@@ -3,9 +3,10 @@
 #include "glite/ce/es-client-api-c/XMLGetNodeCount.h"
 #include "glite/ce/es-client-api-c/XMLGetNodeContent.h"
 #include "glite/ce/es-client-api-c/XMLGetMultipleNodeContent.h"
-#include "glite/ce/es-client-api-c/Target.h"
+#include "glite/ce/es-client-api-c/WTarget.h"
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/algorithm/string.hpp>
 
 using namespace std;
 namespace xml = emi_es::client::xml;
@@ -19,7 +20,7 @@ namespace wrapper = emi_es::client::wrapper;
  *
  *
  */
-wrapper::Target*
+wrapper::WTarget*
 xml::DeserializeOutputFileTarget::get( XMLDoc* doc, const int adPos, const int ofPos, const int index )
 { 
   
@@ -96,36 +97,53 @@ xml::DeserializeOutputFileTarget::get( XMLDoc* doc, const int adPos, const int o
 	   adPos, ofPos, index );
   string *UseIfSuccess = XMLGetNodeContent::get( doc, buf );
 
-  CreationFlagEnumeration creationFlag = ESADL__CreationFlagEnumeration__overwrite;
-  if(CreationFlag)
-    creationFlag = (CreationFlagEnumeration)atoi(CreationFlag->c_str());
+  CreationFlagEnumeration *creationFlag = 0;
+  if(CreationFlag) {
+    creationFlag = new CreationFlagEnumeration( );
+    if(boost::iequals(*CreationFlag, "OVERWRITE"));
+      *creationFlag = CreationFlagEnumeration__overwrite;
+    if(boost::iequals(*CreationFlag, "APPEND"));
+      *creationFlag = CreationFlagEnumeration__append;
+    if(boost::iequals(*CreationFlag, "DONTOVERWRITE"));
+      *creationFlag = CreationFlagEnumeration__dontOverwrite;  
+  }
+
+  bool *useiffail = 0;
+  if(UseIfFailure) {
+    useiffail = new bool;
+    if(boost::iequals(*UseIfFailure, "true"))
+      *useiffail = true;
+    else
+      *useiffail = false;
+  }
   
+  bool *useifcancel = 0;
+  if(UseIfCancel) {
+    useifcancel = new bool;
+    if(boost::iequals(*UseIfCancel, "true"))
+      *useifcancel = true;
+    else
+      *useifcancel = false;
+  }
+  
+  bool *useifsuccess = 0;
+  if(UseIfSuccess) {
+    useifsuccess = new bool;
+    if(boost::iequals(*UseIfSuccess, "true"))
+      *useifsuccess = true;
+    else
+      *useifsuccess = false;
+  }
 
   bool* mandatory = 0;
-  if(Mandatory) {
-    if((*Mandatory)=="true")
-      mandatory = new bool(true);
-    else
-      mandatory = new bool(false);
-  }
-
-  bool useiffail = false;
-  if(UseIfFailure)
-    if((*UseIfFailure) == "true")
-      useiffail = true;
-
-  bool useifcancel = false;
-  if(UseIfCancel)
-    if((*UseIfCancel) == "true")
-      useifcancel = true;
-  
-  bool useifsuccess = true;
-  if(UseIfSuccess) {
-    if((*UseIfSuccess) == "true")
-      useifsuccess = true;
-    else
-      useifsuccess = false;
-  }
+  if(Mandatory)
+    {
+      mandatory = new bool;
+      if(boost::iequals(*Mandatory, "true"))
+        *mandatory = true;
+      else
+        *mandatory = false;
+    }
 
   delete Mandatory;
   delete CreationFlag;
@@ -133,15 +151,18 @@ xml::DeserializeOutputFileTarget::get( XMLDoc* doc, const int adPos, const int o
   delete UseIfCancel;
   delete UseIfSuccess;
   
-  wrapper::Target *T = new wrapper::Target( URI, 
-					    DID, 
-					    options, 
-					    mandatory, 
-					    creationFlag, 
-					    useiffail, 
-					    useifcancel, 
-					    useifsuccess );
+  wrapper::WTarget *T = new wrapper::WTarget( URI, 
+					      DID, 
+					      options, 
+					      mandatory, 
+					      creationFlag, 
+					      useiffail, 
+					      useifcancel, 
+					      useifsuccess );
   delete DID;
+  delete useiffail,
+  delete useifcancel;
+  delete useifsuccess;
   delete mandatory;
   return T;
 }

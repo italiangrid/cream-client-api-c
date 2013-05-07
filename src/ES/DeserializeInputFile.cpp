@@ -21,7 +21,7 @@ namespace wrapper = emi_es::client::wrapper;
  */
 void
 xml::DeserializeInputFile::get( XMLDoc* doc, 
-				vector<wrapper::InputFile>& target,
+				vector<wrapper::WInputFile>& target,
 				const int adPos )
 { 
   char* buf = (char*)malloc(1024);
@@ -40,7 +40,7 @@ xml::DeserializeInputFile::get( XMLDoc* doc,
    *
    */
   for( int k = 1; k <= count; ++k ) {
-    vector<wrapper::Source> Sources;
+    vector<wrapper::WSource> Sources;
     string Name;
     string *isExe = 0;
 
@@ -80,7 +80,7 @@ xml::DeserializeInputFile::get( XMLDoc* doc,
      */
     if(countSource) {
       for( int j = 0; j <= countSource; ++j ) {
-	wrapper::Source *SRC = DeserializeInputFileSource::get( doc, adPos, k, j );
+	wrapper::WSource *SRC = DeserializeInputFileSource::get( doc, adPos, k, j );
 	if(SRC) {
 	  Sources.push_back( *SRC );
 	  delete SRC;
@@ -93,14 +93,16 @@ xml::DeserializeInputFile::get( XMLDoc* doc,
      */
     if(isExe) {
       if((*isExe) == "true") {
-	wrapper::InputFile If( Name, Sources, true );
+        bool _t_ = true;
+	wrapper::WInputFile If( Name, Sources, &_t_ );
 	target.push_back(If);
       } else {
-	wrapper::InputFile If( Name, Sources, false );
+        bool _t_ = false;
+	wrapper::WInputFile If( Name, Sources, &_t_ );
 	target.push_back(If);
       }
     } else {
-      wrapper::InputFile If( Name, Sources, false );
+      wrapper::WInputFile If( Name, Sources, 0 );
       target.push_back(If);
     }
     delete isExe;

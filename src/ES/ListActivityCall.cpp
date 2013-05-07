@@ -41,6 +41,7 @@ ListActivityCall::execute( string& error, enum SOAP_CALL_ERROR_CODES& code)
       this->process_error( error, code );
       return false;
     }
+//  this->save_soap_buffer( );
   return true;
 }
 

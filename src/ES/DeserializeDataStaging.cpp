@@ -1,11 +1,11 @@
 #include "glite/ce/es-client-api-c/DeserializeDataStaging.h"
 #include "glite/ce/es-client-api-c/DeserializeInputFile.h"
 #include "glite/ce/es-client-api-c/DeserializeOutputFile.h"
-#include "glite/ce/es-client-api-c/DataStaging.h"
+#include "glite/ce/es-client-api-c/WDataStaging.h"
 #include "glite/ce/es-client-api-c/XMLDoc.h"
 #include "glite/ce/es-client-api-c/XMLGetNodeCount.h"
 #include "glite/ce/es-client-api-c/XMLGetNodeContent.h"
-#include "glite/ce/es-client-api-c/ExecutableType.h"
+#include "glite/ce/es-client-api-c/WExecutable.h"
 #include "glite/ce/es-client-api-c/typedefs.h"
 
 #include <boost/scoped_ptr.hpp>
@@ -24,7 +24,7 @@ namespace wrapper = emi_es::client::wrapper;
  *
  *
  */
-wrapper::DataStaging*
+wrapper::WDataStaging*
 xml::DeserializeDataStaging::get( XMLDoc* doc, const int adIndex )
 {
   char* buf = (char*)malloc(1024);
@@ -50,11 +50,11 @@ xml::DeserializeDataStaging::get( XMLDoc* doc, const int adIndex )
   }
   delete clipush;
 
-  vector<wrapper::InputFile> IFs;
-  vector<wrapper::OutputFile> OFs;
+  vector<wrapper::WInputFile> IFs;
+  vector<wrapper::WOutputFile> OFs;
   
   DeserializeInputFile::get( doc, IFs, adIndex );
   DeserializeOutputFile::get( doc, OFs, adIndex );
 
-  return new wrapper::DataStaging( clidatapush, IFs, OFs );
+  return new wrapper::WDataStaging( clidatapush, IFs, OFs );
 }

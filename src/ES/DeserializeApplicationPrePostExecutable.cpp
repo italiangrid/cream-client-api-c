@@ -3,7 +3,7 @@
 #include "glite/ce/es-client-api-c/XMLGetNodeCount.h"
 #include "glite/ce/es-client-api-c/XMLGetNodeContent.h"
 #include "glite/ce/es-client-api-c/XMLGetMultipleNodeContent.h"
-#include "glite/ce/es-client-api-c/ExecutableType.h"
+#include "glite/ce/es-client-api-c/WExecutable.h"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -22,8 +22,8 @@ namespace wrapper = emi_es::client::wrapper;
  */
 void
 xml::DeserializeApplicationPrePostExecutable::get( XMLDoc* doc, 
-						   vector<wrapper::ExecutableType>& PRE,
-						   vector<wrapper::ExecutableType>& POST,
+						   vector<wrapper::WExecutable>& PRE,
+						   vector<wrapper::WExecutable>& POST,
 						   const int adIndex )
 {
   char* buf = (char*)malloc(1024);
@@ -53,11 +53,12 @@ xml::DeserializeApplicationPrePostExecutable::get( XMLDoc* doc,
     XMLGetMultipleNodeContent::get( doc, args, buf );
 
     if( failifnoteq ) {
-      wrapper::ExecutableType thisPre(*path, args, atoi(failifnoteq->c_str()) );
+      int f = atoi(failifnoteq->c_str());
+      wrapper::WExecutable thisPre(*path, args, &f );
       PRE.push_back( thisPre );
     }
     else {
-      wrapper::ExecutableType thisPre(*path, args );
+      wrapper::WExecutable thisPre(*path, args, 0 );
       PRE.push_back( thisPre );
     }
   }
@@ -86,10 +87,11 @@ xml::DeserializeApplicationPrePostExecutable::get( XMLDoc* doc,
     XMLGetMultipleNodeContent::get( doc, args, buf );
 
     if( failifnoteq ) {
-      wrapper::ExecutableType thisPost(*path, args, atoi(failifnoteq->c_str()) );
+      int f = atoi(failifnoteq->c_str());
+      wrapper::WExecutable thisPost(*path, args, &f );
       POST.push_back( thisPost );
     } else {
-      wrapper::ExecutableType thisPost(*path, args );
+      wrapper::WExecutable thisPost(*path, args, 0 );
       POST.push_back( thisPost );
     }
   }

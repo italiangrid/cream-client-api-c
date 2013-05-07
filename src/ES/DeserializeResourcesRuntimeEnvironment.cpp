@@ -20,7 +20,7 @@ namespace xml = emi_es::client::xml;
  */
 void
 xml::DeserializeResourcesRuntimeEnvironment::get( XMLDoc* doc, 
-						  vector<wrapper::RuntimeEnvironment>& target,
+						  vector<wrapper::WRuntimeEnvironment>& target,
 						  const int adIndex )
 {
   char* buf = (char*)malloc(1024);
@@ -83,7 +83,7 @@ xml::DeserializeResourcesRuntimeEnvironment::get( XMLDoc* doc,
       delete _opt;
     }
 
-    wrapper::RuntimeEnvironment env(*Name, Version, Options, optional);
+    wrapper::WRuntimeEnvironment env(*Name, Version, Options, optional);
     target.push_back(env);
   }
 }

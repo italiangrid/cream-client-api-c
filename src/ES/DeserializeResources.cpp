@@ -9,14 +9,15 @@
 #include "glite/ce/es-client-api-c/XMLGetNodeCount.h"
 #include "glite/ce/es-client-api-c/XMLGetNodeContent.h"
 #include "glite/ce/es-client-api-c/XMLGetMultipleNodeContent.h"
-#include "glite/ce/es-client-api-c/Resources.h"
-#include "glite/ce/es-client-api-c/RuntimeEnvironment.h"
-#include "glite/ce/es-client-api-c/ParallelEnvironment.h"
-#include "glite/ce/es-client-api-c/CoprocessorType.h"
-#include "glite/ce/es-client-api-c/NetworkInfoType.h"
-#include "glite/ce/es-client-api-c/SlotRequirement.h"
+#include "glite/ce/es-client-api-c/WResources.h"
+#include "glite/ce/es-client-api-c/WRuntimeEnvironment.h"
+#include "glite/ce/es-client-api-c/WParallelEnvironment.h"
+#include "glite/ce/es-client-api-c/WCoprocessorType.h"
+#include "glite/ce/es-client-api-c/WNetworkInfoType.h"
+#include "glite/ce/es-client-api-c/WSlotRequirement.h"
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/algorithm/string.hpp>
 
 using namespace std;
 namespace xml = emi_es::client::xml;
@@ -30,7 +31,7 @@ namespace wrapper = emi_es::client::wrapper;
  *
  *
  */
-wrapper::Resources*
+wrapper::WResources*
 xml::DeserializeResources::get( XMLDoc* doc, 
 				const int adIndex )
 {
@@ -45,14 +46,14 @@ xml::DeserializeResources::get( XMLDoc* doc,
   if( !XMLGetNodeCount::get( doc, buf ) ) 
     return 0;
 
-  vector<wrapper::OperatingSystem> OPs;
+  vector<wrapper::WOperatingSystem> OPs;
   DeserializeResourcesOperatingSystem::get( doc, OPs, adIndex );
-  vector<wrapper::RuntimeEnvironment> RTs;
+  vector<wrapper::WRuntimeEnvironment> RTs;
   DeserializeResourcesRuntimeEnvironment::get( doc, RTs, adIndex );
-  wrapper::ParallelEnvironment *PE = DeserializeResourcesParallelEnvironment::get( doc, adIndex );
-  boost::scoped_ptr< wrapper::ParallelEnvironment > PE_safe_ptr( PE );
-  wrapper::SlotRequirement *SR = DeserializeResourcesSlotRequirement::get( doc, adIndex );
-  boost::scoped_ptr< wrapper::SlotRequirement > SR_safe_ptr( SR );
+  wrapper::WParallelEnvironment *PE = DeserializeResourcesParallelEnvironment::get( doc, adIndex );
+  boost::scoped_ptr< wrapper::WParallelEnvironment > PE_safe_ptr( PE );
+  wrapper::WSlotRequirement *SR = DeserializeResourcesSlotRequirement::get( doc, adIndex );
+  boost::scoped_ptr< wrapper::WSlotRequirement > SR_safe_ptr( SR );
 
   memset( (void*)buf, 0, 1024 );
   sprintf( buf, "//ActivityDescription[%d]/Resources[1]/Platform", adIndex );
@@ -126,7 +127,7 @@ xml::DeserializeResources::get( XMLDoc* doc,
   
   memset( (void*)buf, 0, 1024 );
   sprintf( buf, "//ActivityDescription[%d]/Resources[1]/Benchmark", adIndex );
-  BenchmarkClassType *B = 0;
+  Benchmark *B = 0;
   if(XMLGetNodeCount::get( doc, buf ))
     {
       memset( (void*)buf, 0, 1024 );
@@ -143,48 +144,55 @@ xml::DeserializeResources::get( XMLDoc* doc,
 	  sprintf( buf, "//ActivityDescription[%d]/Resources[1]/Benchmark/@optional", adIndex );
 	  string *opt = XMLGetNodeContent::get( doc, buf );
 	  boost::scoped_ptr< string > opt_safe_ptr( opt );
-	  B = new BenchmarkClassType();
-	  B->BenchmarkType = BENCHMARKTYPE_BOGOMIPS;
-	  if((*type)=="cfp2006")
-	    B->BenchmarkType = BENCHMARKTYPE_CFP2006;
-	  if((*type)=="cint2006")
-	    B->BenchmarkType = BENCHMARKTYPE_CINT2006;
-	  if((*type)=="linpack")
-	    B->BenchmarkType = BENCHMARKTYPE_LINPACK;
-	  if((*type)=="specfp2000")
-	    B->BenchmarkType = BENCHMARKTYPE_SPECFP2000;
-	  if((*type)=="specint2000")
-	    B->BenchmarkType = BENCHMARKTYPE_SPECINT2000;
+	  B = new Benchmark();
+	  B->BenchmarkType = BOGOMIPS;
+	  if(boost::iequals(*type, "cfp2006"))
+	    B->BenchmarkType = CFP2006;
+	  if(boost::iequals(*type,"cint2006"))
+	    B->BenchmarkType = CINT2006;
+	  if(boost::iequals(*type, "linpack"))
+	    B->BenchmarkType = LINPACK;
+	  if(boost::iequals(*type,"specfp2000"))
+	    B->BenchmarkType = SPECFP2000;
+	  if(boost::iequals(*type, "specint2000"))
+	    B->BenchmarkType = SPECINT2000;
 	  B->BenchmarkValue = atoll( value->c_str() );
 	  B->optional = false;
 	  if(opt)
-	    if((*opt)=="true")
+	    if(boost::iequals(*opt, "true"))
 	      B->optional = true;
 	}
       }
     }
 
-  wrapper::CoprocessorType *COP = 0;
-  wrapper::NetworkInfoType *NETI = 0;
+  wrapper::WCoprocessorType *COP = 0;
+  wrapper::WNetworkInfoType *NETI = 0;
   int *nodes = 0;
   ULONG64 *VMEM = 0, *MEM = 0, *DISK = 0;
   bool *rsa = 0;
   ULONG64 *ict = 0, *tct = 0, *wct = 0;
 
   if(Coprocessor) {
-    bool opt = false;
-    if(CoprocessorOpt)
-      if((*CoprocessorOpt)=="true")
-	opt = true;
-    COP = new wrapper::CoprocessorType((CoprocessorEnumeration)atoi(Coprocessor->c_str()), opt);
+    bool *opt = 0;//false;
+    if(CoprocessorOpt) {
+      opt = new bool;
+      if(boost::iequals(*CoprocessorOpt, "true"))
+	*opt = true;
+	else *opt = false;
+    }
+    COP = new wrapper::WCoprocessorType((CoprocessorEnumeration)atoi(Coprocessor->c_str()), opt);
   }
 
   if(NetworkInfo) {
-    bool opt = false;
-    if(NetworkInfoOpt)
-      if((*NetworkInfoOpt)=="true")
-	opt = true;
-    NETI = new wrapper::NetworkInfoType((NetworkInfoEnumeration)atoi(NetworkInfo->c_str()), opt);
+    bool *opt = 0;//false;
+    if(NetworkInfoOpt) {
+      opt = new bool;
+      if(boost::iequals(*NetworkInfoOpt, "true"))
+	*opt = true;
+      else
+        *opt = false;
+    }
+    NETI = new wrapper::WNetworkInfoType((NetworkInfoEnumeration)atoi(NetworkInfo->c_str()), opt);
   }
 
   if(NODES)
@@ -215,13 +223,13 @@ xml::DeserializeResources::get( XMLDoc* doc,
   if(WT)
     wct = new ULONG64( atoll(WT->c_str()) );
 
-  wrapper::Resources *R = new wrapper::Resources(OPs,
-						 Platform,
+  wrapper::WResources *R = new wrapper::WResources(OPs,
+					  	 Platform,
 						 RTs,
 						 PE,
 						 COP,
 						 NETI,
-						 nodes,
+						 (NodeAccessEnumeration*)nodes,
 						 MEM,
 						 VMEM,
 						 DISK,

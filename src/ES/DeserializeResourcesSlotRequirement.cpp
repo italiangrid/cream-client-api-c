@@ -4,9 +4,10 @@
 #include "glite/ce/es-client-api-c/XMLGetNodeCount.h"
 #include "glite/ce/es-client-api-c/XMLGetNodeContent.h"
 #include "glite/ce/es-client-api-c/XMLGetMultipleNodeContent.h"
-#include "glite/ce/es-client-api-c/SlotRequirement.h"
+#include "glite/ce/es-client-api-c/WSlotRequirement.h"
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/algorithm/string.hpp>
 
 using namespace std;
 namespace xml = emi_es::client::xml;
@@ -20,14 +21,14 @@ namespace wrapper = emi_es::client::wrapper;
  *
  *
  */
-wrapper::SlotRequirement*
+wrapper::WSlotRequirement*
 xml::DeserializeResourcesSlotRequirement::get( XMLDoc* doc,
 					       const int adIndex )
 {
-  SlotsPerHostType* sl = 0;
+  SlotRequirement_SlotsPerHost* sl = 0;
   bool *excl = 0;
   string *use = 0;
-  wrapper::SlotRequirement *SL = 0;
+  wrapper::WSlotRequirement *SL = 0;
   
   char* buf = (char*)malloc(1024);
   boost::scoped_ptr< char > buf_safe_ptr( buf );
@@ -58,7 +59,7 @@ xml::DeserializeResourcesSlotRequirement::get( XMLDoc* doc,
     string* ExclusiveExecution = XMLGetNodeContent::get( doc, buf );
     boost::scoped_ptr< string > excl_safe_ptr( ExclusiveExecution );
     if(ExclusiveExecution) {
-      if((*ExclusiveExecution)=="true")
+      if(boost::iequals(*ExclusiveExecution, "true"))
         excl = new bool(true);
       else
         excl = new bool(false);
@@ -85,14 +86,14 @@ xml::DeserializeResourcesSlotRequirement::get( XMLDoc* doc,
     
     if(number)
     {
-      sl = new SlotsPerHostType();
+      sl = new SlotRequirement_SlotsPerHost();
       sl->__item = atoll(number->c_str());
       if(use)
-        sl->useNumberOfSlots = ((*use)=="true") ? true : false;
+        sl->useNumberOfSlots = (boost::iequals(*use, "true")) ? true : false;
 
     }
     
-    SL = new wrapper::SlotRequirement( atoll(NumberOfSlots->c_str() ), sl, excl );
+    SL = new wrapper::WSlotRequirement( atoll(NumberOfSlots->c_str() ), sl, excl );
     delete sl;
     return SL;
 }

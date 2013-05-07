@@ -19,7 +19,7 @@ namespace wrapper = emi_es::client::wrapper;
  *
  */
 void
-xml::DeserializeApplicationRemoteLogging::get( XMLDoc* doc, vector<wrapper::RemoteLoggingWrapper>& target, const int adIndex )
+xml::DeserializeApplicationRemoteLogging::get( XMLDoc* doc, vector<wrapper::WRemoteLogging>& target, const int adIndex )
 {
 
   char* buf = (char*)malloc(1024);
@@ -63,7 +63,7 @@ xml::DeserializeApplicationRemoteLogging::get( XMLDoc* doc, vector<wrapper::Remo
       if(*opt == "true")
 	_opt = true;
 
-    wrapper::RemoteLoggingWrapper RL( *ServiceType, URL, _opt );
+    wrapper::WRemoteLogging RL( *ServiceType, URL, _opt );
     target.push_back( RL );
   }
 }

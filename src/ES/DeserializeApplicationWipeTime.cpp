@@ -23,7 +23,7 @@ namespace xml = emi_es::client::xml;
  *
  *
  */
-OptionalDuration*
+OptionalTime*
 xml::DeserializeApplicationWipeTime::get( XMLDoc* doc, const int adIndex )
 {
   char* buf = (char*)malloc(1024);
@@ -52,9 +52,9 @@ xml::DeserializeApplicationWipeTime::get( XMLDoc* doc, const int adIndex )
     if(*Opt == "true")
       _opt = true;
 
-  OptionalDuration *opt = new OptionalDuration();
-  
-  opt->__item = *Time;
+  OptionalTime *opt = new OptionalTime();
+  if(Time)
+    opt->__item = atoi(Time->c_str());
   opt->optional = _opt;
   return opt;
 }
