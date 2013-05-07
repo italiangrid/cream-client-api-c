@@ -9,7 +9,7 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include "glite/ce/es-client-api-c/RuntimeEnvironment.h"
+#include "glite/ce/es-client-api-c/WRuntimeEnvironment.h"
 
 namespace emi_es {
   namespace client {
@@ -22,7 +22,7 @@ namespace emi_es {
 	friend class DeserializeResources;
       
 protected:     
-	static void get( XMLDoc*, std::vector<wrapper::RuntimeEnvironment>&, const int );
+	static void get( XMLDoc*, std::vector<wrapper::WRuntimeEnvironment>&, const int );
       };
 
     }

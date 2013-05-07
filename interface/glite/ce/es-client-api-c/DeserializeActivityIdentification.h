@@ -14,7 +14,7 @@ namespace emi_es {
     class CreateActivityDescriptionFromXML;
  
     namespace wrapper {
-      class ActivityIdentification;
+      class WActivityIdentification;
     }
   
     namespace xml {
@@ -26,7 +26,7 @@ namespace emi_es {
         friend class emi_es::client::CreateActivityDescriptionFromXML;
       
       protected:
-        static wrapper::ActivityIdentification* get( XMLDoc*, const int ); 
+        static wrapper::WActivityIdentification* get( XMLDoc*, const int ); 
 	
       };
       

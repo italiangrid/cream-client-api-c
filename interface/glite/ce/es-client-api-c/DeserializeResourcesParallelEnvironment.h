@@ -7,13 +7,13 @@
 #include <libxml/xpathInternals.h>
 #include <string>
 
-//#include "glite/ce/es-client-api-c/ParallelEnvironment.h"
+//#include "glite/ce/es-client-api-c/WParallelEnvironment.h"
 
 namespace emi_es {
   namespace client { 
 
     namespace wrapper {
-      class ParallelEnvironment;
+      class WParallelEnvironment;
     }
     
     namespace xml {
@@ -25,7 +25,7 @@ namespace emi_es {
 	friend class DeserializeResources;
       
       protected:
-	static wrapper::ParallelEnvironment* get( XMLDoc*, const int );
+	static wrapper::WParallelEnvironment* get( XMLDoc*, const int );
       };
 
     }

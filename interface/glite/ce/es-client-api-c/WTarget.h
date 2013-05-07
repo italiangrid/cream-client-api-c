@@ -11,32 +11,32 @@ namespace emi_es {
   namespace client {
     namespace wrapper {
       
-      class Target : public TargetType
+      class WTarget : public Target
       {
 	
       private:
-	Target() : TargetType() {}
+	WTarget() : Target() {}
 	
       public:
-	Target( const std::string& uri,
-		std::string* delegationid,
-		const std::vector<OptionType>& option,
-		bool* mandatory,
-		int   creationflag,
-		bool  useiffailure,
-		bool  useifcancel,
-		bool  useifsuccess );
+	WTarget( const std::string& uri,
+		 std::string* delegationid,
+		 const std::vector<OptionType>& option,
+		 bool* mandatory,
+		 CreationFlagEnumeration*   creationflag,
+		 bool  *useiffailure,
+		 bool  *useifcancel,
+		 bool  *useifsuccess );
 	
-	virtual ~Target( ) { this->free( ); }  
-	Target( const Target& );
+	virtual ~WTarget( ) { this->free( ); }  
+	WTarget( const WTarget& );
 	
 	
 	std::string toString( const bool tabbed = false ) const;
 
-	Target& operator=(const Target&);
+	WTarget& operator=(const WTarget&);
 
       private:
-	void set( const Target& );
+	void set( const WTarget& );
 	void free( );
       };
     }

@@ -9,14 +9,14 @@ namespace emi_es {
   namespace client {
     
     namespace wrapper {
-      class ActivityDescription;
+      class WActivityDescription;
     }
       
     class CreateActivityDescriptionFromXML 
     {
     public:
-      static void create( const std::string& file, std::vector< std::pair<wrapper::ActivityDescription*, std::string> >& ) throw(std::string);
-      static void free( std::vector< std::pair<wrapper::ActivityDescription*, std::string> >& );
+      static void create( const std::string& file, std::vector< std::pair<wrapper::WActivityDescription*, std::string> >& ) throw(std::string);
+      static void free( std::vector< std::pair<wrapper::WActivityDescription*, std::string> >& );
     };
       
     

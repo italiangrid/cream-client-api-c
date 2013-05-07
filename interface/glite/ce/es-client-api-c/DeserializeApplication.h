@@ -13,7 +13,7 @@ namespace emi_es {
     class CreateActivityDescriptionFromXML;
   
     namespace wrapper {
-      class Application;
+      class WApplication;
     }
   
     namespace xml {
@@ -25,7 +25,7 @@ namespace emi_es {
         friend class emi_es::client::CreateActivityDescriptionFromXML;
       
       protected:
-        static wrapper::Application* get( XMLDoc*, const int ); 
+        static wrapper::WApplication* get( XMLDoc*, const int ); 
 	
       };
       

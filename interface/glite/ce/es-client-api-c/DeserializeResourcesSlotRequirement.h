@@ -11,7 +11,7 @@ namespace emi_es {
   namespace client {
   
     namespace wrapper {
-      class SlotRequirement;
+      class WSlotRequirement;
     }
   
     namespace xml {
@@ -23,7 +23,7 @@ namespace emi_es {
 	friend class DeserializeResources;
       
       protected:
-	static wrapper::SlotRequirement* get( XMLDoc*, const int );
+	static wrapper::WSlotRequirement* get( XMLDoc*, const int );
       };
 
     }

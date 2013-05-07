@@ -11,7 +11,7 @@ namespace emi_es {
   namespace client {
   
     namespace wrapper {
-      class ExecutableType;
+      class WExecutable;
     }
   
     namespace xml {
@@ -23,7 +23,7 @@ namespace emi_es {
         friend class DeserializeApplication;
       
       protected:
-        static wrapper::ExecutableType* get( XMLDoc*, const int ); 
+        static wrapper::WExecutable* get( XMLDoc*, const int ); 
 	
       };
       

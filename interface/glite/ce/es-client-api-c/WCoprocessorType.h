@@ -9,24 +9,24 @@ namespace emi_es {
   namespace client {
     namespace wrapper {
       
-      class CoprocessorType : public CoprocessorClassType
+      class WCoprocessorType : public CoprocessorType
       {
       private:
-        CoprocessorType( ) : CoprocessorClassType( ) { }
+        WCoprocessorType( ) : CoprocessorType( ) { }
 	
       public:
-	  CoprocessorType( const int _item,
-			   const bool optional );
+	  WCoprocessorType( const int _item,
+			    bool* optional );
 	  
-	  virtual ~CoprocessorType( ) { this->free( ); }
+	  virtual ~WCoprocessorType( ) { this->free( ); }
 	  
-	  CoprocessorType(const CoprocessorType& );
+	  WCoprocessorType(const WCoprocessorType& );
 	  
 	  std::string toString( const bool tabbed = false ) const;
 	   
       private:
-          CoprocessorType& operator=(const CoprocessorType&);
-	  void set( const CoprocessorType& );
+          WCoprocessorType& operator=(const WCoprocessorType&);
+	  void set( const WCoprocessorType& );
 	  void free( );
       };
       

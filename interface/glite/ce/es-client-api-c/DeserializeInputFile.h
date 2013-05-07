@@ -7,7 +7,7 @@
 #include <libxml/xpathInternals.h>
 #include <vector>
 
-#include "glite/ce/es-client-api-c/InputFile.h"
+#include "glite/ce/es-client-api-c/WInputFile.h"
 
 namespace emi_es {
   namespace client {
@@ -20,7 +20,7 @@ namespace emi_es {
 	friend class DeserializeDataStaging;
 
       protected:
-        static void get( XMLDoc*, std::vector<wrapper::InputFile>&, const int adPos ); 
+        static void get( XMLDoc*, std::vector<wrapper::WInputFile>&, const int adPos ); 
       };
       
     }

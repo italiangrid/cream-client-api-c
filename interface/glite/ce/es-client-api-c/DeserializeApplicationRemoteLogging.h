@@ -7,7 +7,7 @@
 #include <libxml/xpathInternals.h>
 #include <vector>
 
-#include "glite/ce/es-client-api-c/RemoteLoggingWrapper.h"
+#include "glite/ce/es-client-api-c/WRemoteLogging.h"
 
 namespace emi_es {
   namespace client {
@@ -20,7 +20,7 @@ namespace emi_es {
         friend class DeserializeApplication;
       
       protected:
-        static void get( XMLDoc*, std::vector<wrapper::RemoteLoggingWrapper>&, const int ); 
+        static void get( XMLDoc*, std::vector<wrapper::WRemoteLogging>&, const int ); 
 	
       };
       

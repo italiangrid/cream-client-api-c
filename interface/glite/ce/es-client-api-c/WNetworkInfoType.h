@@ -11,23 +11,23 @@ namespace emi_es {
   namespace client {
     namespace wrapper {
       
-      class NetworkInfoType : public NetworkInfoClassType
+      class WNetworkInfoType : public NetworkInfoType
       {
       private:
-        NetworkInfoType( ) : NetworkInfoClassType( ) { }
+        WNetworkInfoType( ) : NetworkInfoType( ) { }
 	
 	public:
-	  NetworkInfoType( const int _item,
-			   const bool optional );
+	  WNetworkInfoType( const int _item,
+			    bool* optional );
 	  
-	  virtual ~NetworkInfoType( ) { this->free( ); }
-	  NetworkInfoType( const NetworkInfoType& );
+	  virtual ~WNetworkInfoType( ) { this->free( ); }
+	  WNetworkInfoType( const WNetworkInfoType& );
 	  
 	  std::string toString( const bool tabbed = false ) const;
 
       private:
-        NetworkInfoType& operator=( const NetworkInfoType& );
-        void set( const NetworkInfoType& );
+        WNetworkInfoType& operator=( const WNetworkInfoType& );
+        void set( const WNetworkInfoType& );
 	void free( );
       };
       

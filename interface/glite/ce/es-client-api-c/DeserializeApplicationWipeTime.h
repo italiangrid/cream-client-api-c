@@ -21,7 +21,7 @@ namespace emi_es {
         friend class DeserializeApplication;
       
       protected:
-        static OptionalDuration* get( XMLDoc*, const int );
+        static OptionalTime* get( XMLDoc*, const int );
       };
       
     }

@@ -10,7 +10,7 @@ namespace emi_es {
   namespace client {
 
     namespace wrapper {
-      class Target;
+      class WTarget;
     }
     
     namespace xml {
@@ -22,7 +22,7 @@ namespace emi_es {
         friend class DeserializeOutputFile;
       
       protected:
-        static wrapper::Target* get( XMLDoc*, const int adPos, const int ifPos, const int index ); 
+        static wrapper::WTarget* get( XMLDoc*, const int adPos, const int ifPos, const int index ); 
       };
       
     }

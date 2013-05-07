@@ -10,7 +10,7 @@ namespace emi_es {
   namespace client {
 
     namespace wrapper {
-      class Source;
+      class WSource;
     }
     
     namespace xml {
@@ -22,7 +22,7 @@ namespace emi_es {
         friend class DeserializeInputFile;
       
       protected:
-        static wrapper::Source* get( XMLDoc*, const int adPos, const int ifPos, const int index ); 
+        static wrapper::WSource* get( XMLDoc*, const int adPos, const int ifPos, const int index ); 
       };
       
     }

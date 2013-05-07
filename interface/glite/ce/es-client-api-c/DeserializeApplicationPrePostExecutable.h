@@ -7,7 +7,7 @@
 #include <libxml/xpathInternals.h>
 #include <vector>
 
-#include "glite/ce/es-client-api-c/ExecutableType.h"
+#include "glite/ce/es-client-api-c/WExecutable.h"
 
 namespace emi_es {
   namespace client {
@@ -22,8 +22,8 @@ namespace emi_es {
       
       protected:
         static void get( XMLDoc*, 
-			 std::vector<wrapper::ExecutableType>&, 
-			 std::vector<wrapper::ExecutableType>&, 
+			 std::vector<wrapper::WExecutable>&, 
+			 std::vector<wrapper::WExecutable>&, 
 			 const int ); 
 	
       };

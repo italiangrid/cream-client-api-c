@@ -22,8 +22,7 @@ namespace emi_es {
       ListActivities(  time_t* fromDate,
 		       time_t* toDate,
 		       int* limit,
-		       const std::vector<ActivityStatus::ACTIVITYSTATUS>      states,
-		       const std::vector<ActivityStatus::ACTIVITYSTATUSATTRS> attrs );
+		       std::map< ActivityStatus::ACTIVITYSTATUS, std::vector<ActivityStatus::ACTIVITYSTATUSATTRS> > );
 	
 	virtual ~ListActivities() { this->free( ); }
 	

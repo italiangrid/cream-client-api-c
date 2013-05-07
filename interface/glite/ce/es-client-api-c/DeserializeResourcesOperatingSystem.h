@@ -7,7 +7,7 @@
 #include <libxml/xpathInternals.h>
 #include <string>
 
-#include "glite/ce/es-client-api-c/OperatingSystem.h"
+#include "glite/ce/es-client-api-c/WOperatingSystem.h"
 
 namespace emi_es {
   namespace client {
@@ -20,7 +20,7 @@ namespace emi_es {
 	friend class DeserializeResources;
       
       protected:
-	static void get( XMLDoc*, std::vector<wrapper::OperatingSystem>&, const int );
+	static void get( XMLDoc*, std::vector<wrapper::WOperatingSystem>&, const int );
       };
 
     }

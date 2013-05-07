@@ -4,6 +4,7 @@
 #include "glite/ce/es-client-api-c/es_client_soapStub.h"
 #include "glite/ce/es-client-api-c/typedefs.h"
 
+#include <utility>
 #include <string>
 #include <map>
 
@@ -24,7 +25,7 @@ namespace emi_es {
 
 	public:
 	  void getActivityInfoItems( std::map<std::string, ComputingActivity*>& sucessful, 
-				     std::map<std::string, InternalBaseFault*>& failed) const;
+				     std::map<std::string, std::pair<int, InternalBaseFault*> >& failed) const;
 	};
     }
   }

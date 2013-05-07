@@ -7,7 +7,7 @@
 #include <libxml/xpathInternals.h>
 #include <vector>
 
-#include "glite/ce/es-client-api-c/Notification.h"
+#include "glite/ce/es-client-api-c/WNotification.h"
 
 namespace emi_es {
   namespace client {
@@ -20,7 +20,7 @@ namespace emi_es {
         friend class DeserializeApplication;
       
       protected:
-        static void get( XMLDoc*, std::vector<wrapper::Notification>&, const int ); 
+        static void get( XMLDoc*, std::vector<wrapper::WNotification>&, const int ); 
 	
       };
       

@@ -11,24 +11,23 @@ namespace emi_es {
   namespace client {
     namespace wrapper {
       
-      class Source : public SourceType
+      class WSource : public Source
       {
       private:
-        Source() : SourceType() {}
+        WSource() : Source() {}
       
       public:	  
-	virtual ~Source( ) { this->free( ); }
-	Source( const Source& );
+	virtual ~WSource( ) { this->free( ); }
+	WSource( const WSource& );
 	
-	Source( const std::string& uri, const std::string& delegationid, const std::vector<OptionType>& option );
-	Source( const std::string& uri, const std::vector<OptionType>& option );
+	WSource( const std::string& uri, std::string* delegationid, const std::vector<OptionType>& option );
 	std::string toString( const bool tabbed = false ) const;
-	Source& operator=(const Source&);
+	WSource& operator=(const WSource&);
 
       private:
 	//          Source& operator=(const Source&);
-	  void set( const Source& );
-	  void free( );
+	void set( const WSource& );
+	void free( );
       };
     }
   }
