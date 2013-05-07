@@ -149,6 +149,10 @@ install(TARGETS glite_ce_cream_client_soap glite_ce_cream_client_util
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${AUTODIR}/glite/ce/cream-client-api-c/
         DESTINATION usr/include/glite/ce/cream-client-api-c
         FILES_MATCHING PATTERN "*.h")
+
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${AUTODIR}/glite/ce/cream-client-api-c/
+        DESTINATION usr/include/glite/ce/cream-client-api-c
+        FILES_MATCHING PATTERN "*.nsmap")
       
 add_subdirectory(pkgconfig)
 
