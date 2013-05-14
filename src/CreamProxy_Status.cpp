@@ -39,6 +39,8 @@ using namespace std;
   #define UNION_JOBSTATUSRESULT_DATEMISMATCH              SOAP_UNION__CREAMTYPES__union_Result_DateMismatchFault
   #define UNION_JOBSTATUSRESULT_LEASEIDMISMATCH           SOAP_UNION__CREAMTYPES__union_Result_LeaseIdMismatchFault
   #define UNION_JOBSTATUSRESULT_GENERIC                   SOAP_UNION__CREAMTYPES__union_Result_GenericFault
+  #define UNION_JOBSTATUSRESULT_JOBSTATUS		  SOAP
+
   #define JOBUNKNOWN_FAULT                                JobUnknownFault
   #define JOBSTATUSINVALID_FAULT                          JobStatusInvalidFault
   #define DELEGATIONIDMISMATCH_FAULT                      DelegationIdMismatchFault
@@ -54,6 +56,7 @@ using namespace std;
   #define UNION_JOBSTATUSRESULT_DATEMISMATCH            SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__DateMismatchFault
   #define UNION_JOBSTATUSRESULT_LEASEIDMISMATCH         SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__LeaseIdMismatchFault
   #define UNION_JOBSTATUSRESULT_GENERIC                 SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__GenericFault
+  #define UNION_JOBSTATUSRESULT_JOBSTATUS		SOAP_UNION__CREAMTYPES__union_JobStatusResult_jobStatus	
 
   #define JOBUNKNOWN_FAULT                              CREAMTYPES__JobUnknownFault
   #define JOBSTATUSINVALID_FAULT                        CREAMTYPES__JobStatusInvalidFault
@@ -151,7 +154,7 @@ void processorStatusResult::operator()( const CREAMTYPES__JobStatusResult* jr )
     break;
     
     //------------------------------------------------------------
-  case SOAP_UNION__CREAMTYPES__union_JobStatusResult_jobStatus:
+  case UNION_JOBSTATUSRESULT_JOBSTATUS:
     if( jr->union_JobStatusResult.jobStatus )
       (*m_target)[ *jr->jobDescriptionId ] = boost::make_tuple( JobStatusWrapper::OK, JobStatusWrapper( jr->union_JobStatusResult.jobStatus ), "" );
     
