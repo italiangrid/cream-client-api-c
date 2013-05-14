@@ -33,37 +33,37 @@ using namespace std;
 
 #ifdef SL6
 
-  #define UNION_JOBSTATUSRESULT_JOBUNKNOWN	          SOAP_UNION__CREAMTYPES__union_Result_JobUnknownFault
-  #define UNION_JOBSTATUSRESULT_JOBSTATUSINVALID          SOAP_UNION__CREAMTYPES__union_Result_JobStatusInvalidFault
-  #define UNION_JOBSTATUSRESULT_DELEGATIONIDMISMATCH      SOAP_UNION__CREAMTYPES__union_Result_DelegationIdMismatchFault
-  #define UNION_JOBSTATUSRESULT_DATEMISMATCH              SOAP_UNION__CREAMTYPES__union_Result_DateMismatchFault
-  #define UNION_JOBSTATUSRESULT_LEASEIDMISMATCH           SOAP_UNION__CREAMTYPES__union_Result_LeaseIdMismatchFault
-  #define UNION_JOBSTATUSRESULT_GENERIC                   SOAP_UNION__CREAMTYPES__union_Result_GenericFault
-  #define UNION_JOBSTATUSRESULT_JOBSTATUS		  SOAP
-
-  #define JOBUNKNOWN_FAULT                                JobUnknownFault
-  #define JOBSTATUSINVALID_FAULT                          JobStatusInvalidFault
-  #define DELEGATIONIDMISMATCH_FAULT                      DelegationIdMismatchFault
-  #define DATEMISMATCH_FAULT                              DateMismatchFault
-  #define LEASEIDMISMATCH_FAULT                           LeaseIdMismatchFault
-  #define GENERIC_FAULT                                   GenericFault
+//#define UNION_JOBSTATUSRESULT_JOBSTSATUS		SOAP_UNION__CREAMTYPES__union_Result_JobUnknownFault
+//#define JOBSTATUS			 		jobStatus
+#define UNION_JOBSTATUSRESULT_JOBUNKNOWN		SOAP_UNION__CREAMTYPES__union_Result_JobUnknownFault
+#define JOBUNKNOWN_FAULT				JobUnknownFault
+#define UNION_JOBSTATUSRESULT_JOBSTATUSINVALID		SOAP_UNION__CREAMTYPES__union_Result_JobStatusInvalidFault
+#define JOBSTATUSINVALID_FAULT				JobStatusInvalidFault
+#define UNION_JOBSTATUSRESULT_DELEGATIONIDMISMATCH	SOAP_UNION__CREAMTYPES__union_Result_DelegationIdMismatchFault     
+#define DELEGATIONIDMISMATCH_FAULT        		DelegationIdMismatchFault
+#define UNION_JOBSTATUSRESULT_DATEMISMATCH		SOAP_UNION__CREAMTYPES__union_Result_DateMismatchFault     
+#define DATEMISMATCH_FAULT				DateMismatchFault
+#define UNION_JOBSTATUSRESULT_LEASEIDMISMATCH		SOAP_UNION__CREAMTYPES__union_Result_LeaseIdMismatchFault  
+#define LEASEIDMISMATCH_FAULT				LeaseIdMismatchFault
+#define UNION_JOBSTATUSRESULT_GENERIC			SOAP_UNION__CREAMTYPES__union_Result_GenericFault  
+#define GENERIC_FAULT					GenericFault
 
 #else
 
-  #define UNION_JOBSTATUSRESULT_JOBUNKNOWN	        SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__JobUnknownFault
-  #define UNION_JOBSTATUSRESULT_JOBSTATUSINVALID        SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__JobStatusInvalidFault
-  #define UNION_JOBSTATUSRESULT_DELEGATIONIDMISMATCH    SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__DelegationIdMismatchFault
-  #define UNION_JOBSTATUSRESULT_DATEMISMATCH            SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__DateMismatchFault
-  #define UNION_JOBSTATUSRESULT_LEASEIDMISMATCH         SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__LeaseIdMismatchFault
-  #define UNION_JOBSTATUSRESULT_GENERIC                 SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__GenericFault
-  #define UNION_JOBSTATUSRESULT_JOBSTATUS		SOAP_UNION__CREAMTYPES__union_JobStatusResult_jobStatus	
-
-  #define JOBUNKNOWN_FAULT                              CREAMTYPES__JobUnknownFault
-  #define JOBSTATUSINVALID_FAULT                        CREAMTYPES__JobStatusInvalidFault
-  #define DELEGATIONIDMISMATCH_FAULT                    CREAMTYPES__DelegationIdMismatchFault
-  #define DATEMISMATCH_FAULT                            CREAMTYPES__DateMismatchFault
-  #define LEASEIDMISMATCH_FAULT                         CREAMTYPES__LeaseIdMismatchFault
-  #define GENERIC_FAULT                                 CREAMTYPES__GenericFault 
+//#define UNION_JOBSTATUSRESULT_JOBSTSATUS		SOAP_UNION__CREAMTYPES__union_JobStatusResult_jobStatus
+//#define JOBSTATUS			 		jobStatus
+#define UNION_JOBSTATUSRESULT_JOBUNKNOWN		SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__JobUnknownFault       
+#define JOBUNKNOWN_FAULT				CREAMTYPES__JobUnknownFault
+#define UNION_JOBSTATUSRESULT_JOBSTATUSINVALID		SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__JobStatusInvalidFault 
+#define JOBSTATUSINVALID_FAULT				CREAMTYPES__JobStatusInvalidFault
+#define UNION_JOBSTATUSRESULT_DELEGATIONIDMISMATCH	SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__DelegationIdMismatchFault     
+#define DELEGATIONIDMISMATCH_FAULT        		CREAMTYPES__DelegationIdMismatchFault
+#define UNION_JOBSTATUSRESULT_DATEMISMATCH		SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__DateMismatchFault     
+#define DATEMISMATCH_FAULT				CREAMTYPES__DateMismatchFault
+#define UNION_JOBSTATUSRESULT_LEASEIDMISMATCH		SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__LeaseIdMismatchFault  
+#define LEASEIDMISMATCH_FAULT				CREAMTYPES__LeaseIdMismatchFault
+#define UNION_JOBSTATUSRESULT_GENERIC			SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__GenericFault  
+#define GENERIC_FAULT					CREAMTYPES__GenericFault
 
 #endif
 
@@ -154,7 +154,7 @@ void processorStatusResult::operator()( const CREAMTYPES__JobStatusResult* jr )
     break;
     
     //------------------------------------------------------------
-  case UNION_JOBSTATUSRESULT_JOBSTATUS:
+  case SOAP_UNION__CREAMTYPES__union_JobStatusResult_jobStatus:
     if( jr->union_JobStatusResult.jobStatus )
       (*m_target)[ *jr->jobDescriptionId ] = boost::make_tuple( JobStatusWrapper::OK, JobStatusWrapper( jr->union_JobStatusResult.jobStatus ), "" );
     

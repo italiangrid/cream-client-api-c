@@ -24,35 +24,33 @@ using namespace glite::ce::cream_client_api::soap_proxy;
 
 #ifdef SL6
 
-  #define UNION_JOBSTATUSRESULT_JOBUNKNOWN	 	  SOAP_UNION__CREAMTYPES__union_Result_JobUnknownFault
-  #define UNION_JOBSTATUSRESULT_JOBSTATUSINVALID 	  SOAP_UNION__CREAMTYPES__union_Result_JobStatusInvalidFault
-  #define UNION_JOBSTATUSRESULT_DELEGATIONIDMISMATCH	  SOAP_UNION__CREAMTYPES__union_Result_DelegationIdMismatchFault
-  #define UNION_JOBSTATUSRESULT_DATEMISMATCH		  SOAP_UNION__CREAMTYPES__union_Result_DateMismatchFault
-  #define UNION_JOBSTATUSRESULT_LEASEIDMISMATCH		  SOAP_UNION__CREAMTYPES__union_Result_LeaseIdMismatchFault
-  #define UNION_JOBSTATUSRESULT_GENERIC			  SOAP_UNION__CREAMTYPES__union_Result_GenericFault
-  
-  #define JOBUNKNOWN_FAULT 				  JobUnknownFault
-  #define JOBSTATUSINVALID_FAULT 			  JobStatusInvalidFault
-  #define DELEGATIONIDMISMATCH_FAULT 			  DelegationIdMismatchFault
-  #define DATEMISMATCH_FAULT				  DateMismatchFault
-  #define LEASEIDMISMATCH_FAULT				  LeaseIdMismatchFault
-  #define GENERIC_FAULT					  GenericFault
+#define UNION_RESULT_JOBUNKNOWN 		SOAP_UNION__CREAMTYPES__union_Result_JobUnknownFault     
+#define JOBUNKNOWN_FAULT       			JobUnknownFault
+#define UNION_RESULT_JOBSTATUSINVALID 		SOAP_UNION__CREAMTYPES__union_Result_JobStatusInvalidFault
+#define JOBSTATUSINVALID_FAULT       		JobStatusInvalidFault
+#define UNION_RESULT_DELEGATIONIDMISMATCH 	SOAP_UNION__CREAMTYPES__union_Result_DelegationIdMismatchFault    
+#define DELEGATIONIDMISMATCH_FAULT       	DelegationIdMismatchFault
+#define UNION_RESULT_DATEMISMATCH 		SOAP_UNION__CREAMTYPES__union_Result_DateMismatchFault     
+#define DATEMISMATCH_FAULT      		DateMismatchFault
+#define UNION_RESULT_LEASEIDMISMATCH 		SOAP_UNION__CREAMTYPES__union_Result_LeaseIdMismatchFault
+#define LEASEIDMISMATCH_FAULT		        LeaseIdMismatchFault
+#define UNION_RESULT_GENERIC 			SOAP_UNION__CREAMTYPES__union_Result_GenericFault 
+#define GENERIC_FAULT      			GenericFault
 
 #else
 
-  #define UNION_JOBSTATUSRESULT_JOBUNKNOWN	 	SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__JobUnknownFault
-  #define UNION_JOBSTATUSRESULT_JOBSTATUSINVALID 	SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__JobStatusInvalidFault
-  #define UNION_JOBSTATUSRESULT_DELEGATIONIDMISMATCH	SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__DelegationIdMismatchFault
-  #define UNION_JOBSTATUSRESULT_DATEMISMATCH            SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__DateMismatchFault
-  #define UNION_JOBSTATUSRESULT_LEASEIDMISMATCH    	SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__DateMismatchFault
-  #define UNION_JOBSTATUSRESULT_GENERIC                 SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__GenericFault
-   
-  #define JOBUNKNOWN_FAULT 				CREAMTYPES__JobUnknownFault
-  #define JOBSTATUSINVALID_FAULT 			CREAMTYPES__JobStatusInvalidFault
-  #define DELEGATIONIDMISMATCH_FAULT 			CREAMTYPES__DelegationIdMismatchFault
-  #define DATEMISMATCH_FAULT                            CREAMTYPES__DateMismatchFault
-  #define LEASEIDMISMATCH_FAULT                         CREAMTYPES__LeaseIdMismatchFault
-  #define GENERIC_FAULT					CREAMTYPES__GenericFault 
+#define UNION_RESULT_JOBUNKNOWN 		SOAP_UNION__CREAMTYPES__union_Result_CREAMTYPES__JobUnknownFault        
+#define JOBUNKNOWN_FAULT       			CREAMTYPES__JobUnknownFault
+#define UNION_RESULT_JOBSTATUSINVALID 		SOAP_UNION__CREAMTYPES__union_Result_CREAMTYPES__JobStatusInvalidFault  
+#define JOBSTATUSINVALID_FAULT       		CREAMTYPES__JobStatusInvalidFault
+#define UNION_RESULT_DELEGATIONIDMISMATCH 	SOAP_UNION__CREAMTYPES__union_Result_CREAMTYPES__DelegationIdMismatchFault      
+#define DELEGATIONIDMISMATCH_FAULT       	CREAMTYPES__DelegationIdMismatchFault
+#define UNION_RESULT_DATEMISMATCH 		SOAP_UNION__CREAMTYPES__union_Result_CREAMTYPES__DateMismatchFault      
+#define DATEMISMATCH_FAULT      		CREAMTYPES__DateMismatchFault
+#define UNION_RESULT_LEASEIDMISMATCH 		SOAP_UNION__CREAMTYPES__union_Result_CREAMTYPES__LeaseIdMismatchFault   
+#define LEASEIDMISMATCH_FAULT		        CREAMTYPES__LeaseIdMismatchFault
+#define UNION_RESULT_GENERIC 			SOAP_UNION__CREAMTYPES__union_Result_CREAMTYPES__GenericFault   
+#define GENERIC_FAULT      			CREAMTYPES__GenericFault
 
 #endif
 
@@ -64,10 +62,10 @@ void ResultWrapper::set(const std::vector<CREAMTYPES__Result * >& results) throw
     CREAMTYPES__JobId* job           = (*it)->jobId;
     std::string errMex;
     
-    switch((*it)->__union_Result) {
+    switch((*it)->__union_Result) { // *it is of type "CREAMTYPES__Result
       
-      //------------------------------------------------------------
-    case UNION_JOBSTATUSRESULT_JOBUNKNOWN:
+    //------------------------------------------------------------
+    case UNION_RESULT_JOBUNKNOWN:
     if( (*it)->union_Result.JOBUNKNOWN_FAULT )
        errMex = ExceptionFactory::makeStringFromFault( (*it)->union_Result.JOBUNKNOWN_FAULT );
       else
@@ -79,7 +77,7 @@ void ResultWrapper::set(const std::vector<CREAMTYPES__Result * >& results) throw
       break;
      
       //------------------------------------------------------------
-    case UNION_JOBSTATUSRESULT_JOBSTATUSINVALID:
+    case UNION_RESULT_JOBSTATUSINVALID:
       if( (*it)->union_Result.JOBSTATUSINVALID_FAULT )
        errMex = ExceptionFactory::makeStringFromFault( (*it)->union_Result.JOBSTATUSINVALID_FAULT );
       else
@@ -91,7 +89,7 @@ void ResultWrapper::set(const std::vector<CREAMTYPES__Result * >& results) throw
       break; 
       
       //------------------------------------------------------------
-    case UNION_JOBSTATUSRESULT_DELEGATIONIDMISMATCH:
+    case UNION_RESULT_DELEGATIONIDMISMATCH:
       if( (*it)->union_Result.DELEGATIONIDMISMATCH_FAULT)
        errMex = ExceptionFactory::makeStringFromFault( (*it)->union_Result.DELEGATIONIDMISMATCH_FAULT);
       else
@@ -103,7 +101,7 @@ void ResultWrapper::set(const std::vector<CREAMTYPES__Result * >& results) throw
       break; 
       
       //------------------------------------------------------------
-    case UNION_JOBSTATUSRESULT_DATEMISMATCH:
+    case UNION_RESULT_DATEMISMATCH:
       if( (*it)->union_Result.DATEMISMATCH_FAULT )
        errMex = ExceptionFactory::makeStringFromFault( (*it)->union_Result.DATEMISMATCH_FAULT);
       else
@@ -115,7 +113,7 @@ void ResultWrapper::set(const std::vector<CREAMTYPES__Result * >& results) throw
       break; 
       
       //------------------------------------------------------------
-    case UNION_JOBSTATUSRESULT_GENERIC:
+    case UNION_RESULT_GENERIC:
       if( (*it)->union_Result.GENERIC_FAULT)
        errMex = ExceptionFactory::makeStringFromFault( (*it)->union_Result.GENERIC_FAULT);
       else
@@ -125,9 +123,9 @@ void ResultWrapper::set(const std::vector<CREAMTYPES__Result * >& results) throw
       else
 	notExistingJobs.push_back( std::make_pair(JobIdWrapper(), errMex));
       break;
- /*     
+      
       //------------------------------------------------------------
-    case UNION_JOBSTATUSRESULT_LEASEIDMISMATCH:
+    case UNION_RESULT_LEASEIDMISMATCH:
       if( (*it)->union_Result.LEASEIDMISMATCH_FAULT )
        errMex = ExceptionFactory::makeStringFromFault( (*it)->union_Result.LEASEIDMISMATCH_FAULT );
       else
@@ -137,7 +135,7 @@ void ResultWrapper::set(const std::vector<CREAMTYPES__Result * >& results) throw
       else
 	notMatchingLeaseJobs.push_back( std::make_pair(JobIdWrapper(), errMex));
       break;
-      */
+      
     }
     
   } // end loop over Results
