@@ -30,6 +30,7 @@ using namespace glite::ce::cream_client_api::soap_proxy;
   #define UNION_JOBSTATUSRESULT_DATEMISMATCH		  SOAP_UNION__CREAMTYPES__union_Result_DateMismatchFault
   #define UNION_JOBSTATUSRESULT_LEASEIDMISMATCH		  SOAP_UNION__CREAMTYPES__union_Result_LeaseIdMismatchFault
   #define UNION_JOBSTATUSRESULT_GENERIC			  SOAP_UNION__CREAMTYPES__union_Result_GenericFault
+  
   #define JOBUNKNOWN_FAULT 				  JobUnknownFault
   #define JOBSTATUSINVALID_FAULT 			  JobStatusInvalidFault
   #define DELEGATIONIDMISMATCH_FAULT 			  DelegationIdMismatchFault
@@ -42,9 +43,9 @@ using namespace glite::ce::cream_client_api::soap_proxy;
   #define UNION_JOBSTATUSRESULT_JOBUNKNOWN	 	SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__JobUnknownFault
   #define UNION_JOBSTATUSRESULT_JOBSTATUSINVALID 	SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__JobStatusInvalidFault
   #define UNION_JOBSTATUSRESULT_DELEGATIONIDMISMATCH	SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__DelegationIdMismatchFault
-  #define UNION_JOBSTATUSRESULT_DATEMISMATCH            SOAP_UNION__CREAMTYPES__unãon_JobStatusResult_CREAMTYPES__DateMismatchFault
-  #define UNION_JOBSTATUSRESULT_LEASEIDMISMATCH    	SOAP_UNION__CREAMTYPES__unãon_JobStatusResult_CREAMTYPES__DateMismatchFault
-  #define UNION_JOBSTATUSRESULT_GENERIC                 SOAP_UNION__CREAMTYPES__unãon_JobStatusResult_CREAMTYPES__DateMismatchFault
+  #define UNION_JOBSTATUSRESULT_DATEMISMATCH            SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__DateMismatchFault
+  #define UNION_JOBSTATUSRESULT_LEASEIDMISMATCH    	SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__DateMismatchFault
+  #define UNION_JOBSTATUSRESULT_GENERIC                 SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__GenericFault
    
   #define JOBUNKNOWN_FAULT 				CREAMTYPES__JobUnknownFault
   #define JOBSTATUSINVALID_FAULT 			CREAMTYPES__JobStatusInvalidFault
@@ -66,9 +67,7 @@ void ResultWrapper::set(const std::vector<CREAMTYPES__Result * >& results) throw
     switch((*it)->__union_Result) {
       
       //------------------------------------------------------------
-    //case SOAP_UNION__CREAMTYPES__union_JobStatusResult_JobUnknownFault:
     case UNION_JOBSTATUSRESULT_JOBUNKNOWN:
-    //  if( (*it)->union_Result.CREAMTYPES__JobUnknownFault )
     if( (*it)->union_Result.JOBUNKNOWN_FAULT )
        errMex = ExceptionFactory::makeStringFromFault( (*it)->union_Result.JOBUNKNOWN_FAULT );
       else
@@ -78,7 +77,7 @@ void ResultWrapper::set(const std::vector<CREAMTYPES__Result * >& results) throw
       else
 	notExistingJobs.push_back( std::make_pair(JobIdWrapper(), errMex));
       break;
-      
+     
       //------------------------------------------------------------
     case UNION_JOBSTATUSRESULT_JOBSTATUSINVALID:
       if( (*it)->union_Result.JOBSTATUSINVALID_FAULT )
@@ -126,7 +125,7 @@ void ResultWrapper::set(const std::vector<CREAMTYPES__Result * >& results) throw
       else
 	notExistingJobs.push_back( std::make_pair(JobIdWrapper(), errMex));
       break;
-      
+ /*     
       //------------------------------------------------------------
     case UNION_JOBSTATUSRESULT_LEASEIDMISMATCH:
       if( (*it)->union_Result.LEASEIDMISMATCH_FAULT )
@@ -138,6 +137,7 @@ void ResultWrapper::set(const std::vector<CREAMTYPES__Result * >& results) throw
       else
 	notMatchingLeaseJobs.push_back( std::make_pair(JobIdWrapper(), errMex));
       break;
+      */
     }
     
   } // end loop over Results

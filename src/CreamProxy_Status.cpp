@@ -51,9 +51,9 @@ using namespace std;
   #define UNION_JOBSTATUSRESULT_JOBUNKNOWN	        SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__JobUnknownFault
   #define UNION_JOBSTATUSRESULT_JOBSTATUSINVALID        SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__JobStatusInvalidFault
   #define UNION_JOBSTATUSRESULT_DELEGATIONIDMISMATCH    SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__DelegationIdMismatchFault
-  #define UNION_JOBSTATUSRESULT_DATEMISMATCH            SOAP_UNION__CREAMTYPES__unãon_JobStatusResult_CREAMTYPES__DateMismatchFault
-  #define UNION_JOBSTATUSRESULT_LEASEIDMISMATCH         SOAP_UNION__CREAMTYPES__unãon_JobStatusResult_CREAMTYPES__DateMismatchFault
-  #define UNION_JOBSTATUSRESULT_GENERIC                 SOAP_UNION__CREAMTYPES__unãon_JobStatusResult_CREAMTYPES__DateMismatchFault
+  #define UNION_JOBSTATUSRESULT_DATEMISMATCH            SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__DateMismatchFault
+  #define UNION_JOBSTATUSRESULT_LEASEIDMISMATCH         SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__LeaseIdMismatchFault
+  #define UNION_JOBSTATUSRESULT_GENERIC                 SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__GenericFault
 
   #define JOBUNKNOWN_FAULT                              CREAMTYPES__JobUnknownFault
   #define JOBSTATUSINVALID_FAULT                        CREAMTYPES__JobStatusInvalidFault
