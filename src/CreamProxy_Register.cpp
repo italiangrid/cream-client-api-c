@@ -34,7 +34,27 @@ END LICENSE */
 using namespace std;
 using namespace glite::ce::cream_client_api::soap_proxy;
 
+#ifdef SL6
+  #define UNION_JOBREGISTERRESULT_DELEGATIONPROXY 	SOAP_UNION__CREAMTYPES__union_JobRegisterResult_DelegationProxyFault
+  #define UNION_JOBREGISTERRESULT_DELEGATIONIDMISMATCH  SOAP_UNION__CREAMTYPES__union_JobRegisterResult_DelegationIdMismatchFault
+  #define UNION_JOBREGISTERRESULT_LEASEIDMISMATCH	SOAP_UNION__CREAMTYPES__union_JobRegisterResult_LeaseIdMismatchFault
+  #define UNION_JOBREGISTERRESULT_GENERIC		SOAP_UNION__CREAMTYPES__union_JobRegisterResult_GenericFault
 
+  #define DELEGATIONIDMISMATCH_FAULT			DelegationProxyFault
+  #define LEASEIDMISMATCH_FAULT				LeaseIdMismatchFault
+  #define DELEGATIONPROXY_FAULT				DelegationProxyFault
+  #define GENERIC_FAULT					GenericFault
+#else
+  #define UNION_JOBREGISTERRESULT_DELEGATIONPROXY       SOAP_UNION__CREAMTYPES__union_JobRegisterResult_CREAMTYPES__DelegationProxyFault
+  #define UNION_JOBREGISTERRESULT_DELEGATIONIDMISMATCH  SOAP_UNION__CREAMTYPES__union_JobRegisterResult_CREAMTYPES__DelegationIdMismatchFault
+  #define UNION_JOBREGISTERRESULT_LEASEIDMISMATCH       SOAP_UNION__CREAMTYPES__union_JobRegisterResult_CREAMTYPES__LeaseIdMismatchFault
+  #define UNION_JOBREGISTERRESULT_GENERIC               SOAP_UNION__CREAMTYPES__union_JobRegisterResult_CREAMTYPES__GenericFault
+
+  #define DELEGATIONIDMISMATCH_FAULT			CREAMTYPES__DelegationProxyFault
+  #define LEASEIDMISMATCH_FAULT				CREAMTYPES__LeaseIdMismatchFault
+  #define DELEGATIONPROXY_FAULT				CREAMTYPES__DelegationProxyFault
+  #define GENERIC_FAULT					CREAMTYPES__GenericFault
+#endif
 
 //__________________________________________________________________________________
 void processorRegisterResult::operator()( const CREAMTYPES__JobRegisterResult* jr ) 
@@ -55,31 +75,31 @@ void processorRegisterResult::operator()( const CREAMTYPES__JobRegisterResult* j
     (*m_target)[*jr->jobDescriptionId] = boost::make_tuple(JobIdWrapper::OK, JobIdWrapper(jr->union_JobRegisterResult.jobId ), "");
     break;      
     
-  case SOAP_UNION__CREAMTYPES__union_JobRegisterResult_CREAMTYPES__DelegationProxyFault:
-    if(jr->union_JobRegisterResult.CREAMTYPES__DelegationProxyFault) {
-      string errMex = ExceptionFactory::makeStringFromFault( jr->union_JobRegisterResult.CREAMTYPES__DelegationProxyFault );
+  case UNION_JOBREGISTERRESULT_DELEGATIONPROXY:
+    if(jr->union_JobRegisterResult.DELEGATIONPROXY_FAULT) {
+      string errMex = ExceptionFactory::makeStringFromFault( jr->union_JobRegisterResult.DELEGATIONPROXY_FAULT);
       (*m_target)[*jr->jobDescriptionId] = boost::make_tuple( JobIdWrapper::DELEGATIONPROXYERROR, JobIdWrapper( "", "", vector<JobPropertyWrapper>()), errMex );
     }
     break;
     
-  case SOAP_UNION__CREAMTYPES__union_JobRegisterResult_CREAMTYPES__DelegationIdMismatchFault:
-    if(jr->union_JobRegisterResult.CREAMTYPES__DelegationIdMismatchFault) {
-      string errMex = ExceptionFactory::makeStringFromFault( jr->union_JobRegisterResult.CREAMTYPES__DelegationIdMismatchFault );
+  case UNION_JOBREGISTERRESULT_DELEGATIONIDMISMATCH:
+    if(jr->union_JobRegisterResult.DELEGATIONIDMISMATCH_FAULT) {
+      string errMex = ExceptionFactory::makeStringFromFault( jr->union_JobRegisterResult.DELEGATIONIDMISMATCH_FAULT );
       (*m_target)[*jr->jobDescriptionId] = boost::make_tuple( JobIdWrapper::DELEGATIONIDMISMATCH, JobIdWrapper( "", "", vector<JobPropertyWrapper>()), errMex );
     }
     break;
     
     
-  case SOAP_UNION__CREAMTYPES__union_JobRegisterResult_CREAMTYPES__LeaseIdMismatchFault:
-    if(jr->union_JobRegisterResult.CREAMTYPES__LeaseIdMismatchFault) {
-      string errMex = ExceptionFactory::makeStringFromFault( jr->union_JobRegisterResult.CREAMTYPES__LeaseIdMismatchFault );
+  case UNION_JOBREGISTERRESULT_LEASEIDMISMATCH:
+    if(jr->union_JobRegisterResult.LEASEIDMISMATCH_FAULT) {
+      string errMex = ExceptionFactory::makeStringFromFault( jr->union_JobRegisterResult.LEASEIDMISMATCH_FAULT );
       (*m_target)[*jr->jobDescriptionId] = boost::make_tuple( JobIdWrapper::LEASEIDMISMATCH, JobIdWrapper( "", "", vector<JobPropertyWrapper>()), errMex );
     }
     break;  
     
-  case SOAP_UNION__CREAMTYPES__union_JobRegisterResult_CREAMTYPES__GenericFault:
-    if( jr->union_JobRegisterResult.CREAMTYPES__GenericFault ) {
-      string errMex = ExceptionFactory::makeStringFromFault( jr->union_JobRegisterResult.CREAMTYPES__GenericFault );
+  case UNION_JOBREGISTERRESULT_GENERIC:
+    if( jr->union_JobRegisterResult.GENERIC_FAULT ) {
+      string errMex = ExceptionFactory::makeStringFromFault( jr->union_JobRegisterResult.GENERIC_FAULT);
       (*m_target)[*jr->jobDescriptionId] = boost::make_tuple( JobIdWrapper::GENERIC, JobIdWrapper( "", "", vector<JobPropertyWrapper>()), errMex );
     }
     break;  

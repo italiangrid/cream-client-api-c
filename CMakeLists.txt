@@ -39,6 +39,9 @@ add_custom_target(rpm
                   COMMAND rpmbuild -ba --define '_topdir ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild'
                           ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild/SPECS/${PKGNAME}.spec
                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+if(DEFINED SL6) 
+  add_definitions( -DSL6 )
+endif(DEFINED SL6)
 
 
 add_subdirectory(src)
