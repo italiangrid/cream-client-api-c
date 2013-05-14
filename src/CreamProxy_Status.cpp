@@ -33,25 +33,25 @@ using namespace std;
 
 #ifdef SL6
 
-//#define UNION_JOBSTATUSRESULT_JOBSTSATUS		SOAP_UNION__CREAMTYPES__union_Result_JobUnknownFault
-//#define JOBSTATUS			 		jobStatus
-#define UNION_JOBSTATUSRESULT_JOBUNKNOWN		SOAP_UNION__CREAMTYPES__union_Result_JobUnknownFault
+#define UNION_JOBSTATUSRESULT_JOBSTSATUS		SOAP_UNION__CREAMTYPES__union_JobStatusResult_jobStatus
+#define JOBSTATUS			 		jobStatus
+#define UNION_JOBSTATUSRESULT_JOBUNKNOWN		SOAP_UNION__CREAMTYPES__union_JobStatusResult_JobUnknownFault
 #define JOBUNKNOWN_FAULT				JobUnknownFault
-#define UNION_JOBSTATUSRESULT_JOBSTATUSINVALID		SOAP_UNION__CREAMTYPES__union_Result_JobStatusInvalidFault
+#define UNION_JOBSTATUSRESULT_JOBSTATUSINVALID		SOAP_UNION__CREAMTYPES__union_JobStatusResult_JobStatusInvalidFault
 #define JOBSTATUSINVALID_FAULT				JobStatusInvalidFault
-#define UNION_JOBSTATUSRESULT_DELEGATIONIDMISMATCH	SOAP_UNION__CREAMTYPES__union_Result_DelegationIdMismatchFault     
+#define UNION_JOBSTATUSRESULT_DELEGATIONIDMISMATCH	SOAP_UNION__CREAMTYPES__union_JobStatusResult_DelegationIdMismatchFault     
 #define DELEGATIONIDMISMATCH_FAULT        		DelegationIdMismatchFault
-#define UNION_JOBSTATUSRESULT_DATEMISMATCH		SOAP_UNION__CREAMTYPES__union_Result_DateMismatchFault     
+#define UNION_JOBSTATUSRESULT_DATEMISMATCH		SOAP_UNION__CREAMTYPES__union_JobStatusResult_DateMismatchFault     
 #define DATEMISMATCH_FAULT				DateMismatchFault
-#define UNION_JOBSTATUSRESULT_LEASEIDMISMATCH		SOAP_UNION__CREAMTYPES__union_Result_LeaseIdMismatchFault  
+#define UNION_JOBSTATUSRESULT_LEASEIDMISMATCH		SOAP_UNION__CREAMTYPES__union_JobStatusResult_LeaseIdMismatchFault  
 #define LEASEIDMISMATCH_FAULT				LeaseIdMismatchFault
-#define UNION_JOBSTATUSRESULT_GENERIC			SOAP_UNION__CREAMTYPES__union_Result_GenericFault  
+#define UNION_JOBSTATUSRESULT_GENERIC			SOAP_UNION__CREAMTYPES__union_JobStatusResult_GenericFault  
 #define GENERIC_FAULT					GenericFault
 
 #else
 
-//#define UNION_JOBSTATUSRESULT_JOBSTSATUS		SOAP_UNION__CREAMTYPES__union_JobStatusResult_jobStatus
-//#define JOBSTATUS			 		jobStatus
+#define UNION_JOBSTATUSRESULT_JOBSTSATUS		SOAP_UNION__CREAMTYPES__union_JobStatusResult_jobStatus
+#define JOBSTATUS			 		jobStatus
 #define UNION_JOBSTATUSRESULT_JOBUNKNOWN		SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__JobUnknownFault       
 #define JOBUNKNOWN_FAULT				CREAMTYPES__JobUnknownFault
 #define UNION_JOBSTATUSRESULT_JOBSTATUSINVALID		SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__JobStatusInvalidFault 
