@@ -54,6 +54,15 @@ pkg_check_modules(GLOBUS_GSSAPI_GSI globus-gssapi-gsi)
 set(Boost_USE_MULTITHREADED ON)
 find_package( Boost COMPONENTS date_time filesystem regex thread)
 
+execute_process(COMMAND soapcpp2 -v
+                ERROR_VARIABLE GSOAP_DISCLAIMER)
+execute_process(COMMAND echo ${GSOAP_DISCLAIMER}
+                COMMAND grep -Eo [0-9]+\\.[0-9]+\\.[0-9]+
+                OUTPUT_VARIABLE GSOAP_FULL_VERSION)
+if( GSOAP_FULL_VERSION VERSION_GREATER "2.7.13" )
+    add_definitions( -DSL6 )
+endif( GSOAP_FULL_VERSION VERSION_GREATER "2.7.13" )
+
 add_definitions( -pipe -DWANT_NAMESPACES -DWANT_CLASSAD_NAMESPACE )
 
 link_directories(${VOMS_LIBRARY_DIRS}
