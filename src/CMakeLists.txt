@@ -49,9 +49,19 @@ pkg_check_modules(LOG4CPP log4cpp)
 pkg_check_modules(VOMS voms-2.0)
 pkg_check_modules(GRIDSITE_OPENSSL emi-gridsite-openssl)
 pkg_check_modules(CLASSAD emi-classad-ns)
+pkg_check_modules(GLOBUS_GSSAPI_GSI globus-gssapi-gsi)
 
 set(Boost_USE_MULTITHREADED ON)
 find_package( Boost COMPONENTS date_time filesystem regex thread)
+
+execute_process(COMMAND soapcpp2 -v
+                ERROR_VARIABLE GSOAP_DISCLAIMER)
+execute_process(COMMAND echo ${GSOAP_DISCLAIMER}
+                COMMAND grep -Eo [0-9]+\\.[0-9]+\\.[0-9]+
+                OUTPUT_VARIABLE GSOAP_FULL_VERSION)
+if( GSOAP_FULL_VERSION VERSION_GREATER "2.7.13" )
+    add_definitions( -DSL6 )
+endif( GSOAP_FULL_VERSION VERSION_GREATER "2.7.13" )
 
 add_definitions( -pipe -DWANT_NAMESPACES -DWANT_CLASSAD_NAMESPACE )
 
@@ -64,6 +74,7 @@ include_directories(${CLASSAD_INCLUDE_DIRS}
                     ${GSOAP_INCLUDE_DIRS}
                     ${LOG4CPP_INCLUDE_DIRS}
                     ${Boost_INCLUDE_DIRS}
+                    ${GLOBUS_GSSAPI_GSI_INCLUDE_DIRS}
                     ${PROJECT_SOURCE_DIR}/interface
                     ${CMAKE_CURRENT_BINARY_DIR}/${AUTODIR})
 
@@ -149,11 +160,10 @@ install(TARGETS glite_ce_cream_client_soap glite_ce_cream_client_util
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${AUTODIR}/glite/ce/cream-client-api-c/
         DESTINATION usr/include/glite/ce/cream-client-api-c
         FILES_MATCHING PATTERN "*.h")
-
+        
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${AUTODIR}/glite/ce/cream-client-api-c/
         DESTINATION usr/include/glite/ce/cream-client-api-c
         FILES_MATCHING PATTERN "*.nsmap")
-      
+
 add_subdirectory(pkgconfig)
-
-
+      

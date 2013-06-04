@@ -31,6 +31,43 @@ END LICENSE */
 using namespace glite::ce::cream_client_api::soap_proxy;
 using namespace std;
 
+#ifdef SL6
+
+#define UNION_JOBSTATUSRESULT_JOBSTSATUS		SOAP_UNION__CREAMTYPES__union_JobStatusResult_jobStatus
+#define JOBSTATUS			 		jobStatus
+#define UNION_JOBSTATUSRESULT_JOBUNKNOWN		SOAP_UNION__CREAMTYPES__union_JobStatusResult_JobUnknownFault
+#define JOBUNKNOWN_FAULT				JobUnknownFault
+#define UNION_JOBSTATUSRESULT_JOBSTATUSINVALID		SOAP_UNION__CREAMTYPES__union_JobStatusResult_JobStatusInvalidFault
+#define JOBSTATUSINVALID_FAULT				JobStatusInvalidFault
+#define UNION_JOBSTATUSRESULT_DELEGATIONIDMISMATCH	SOAP_UNION__CREAMTYPES__union_JobStatusResult_DelegationIdMismatchFault     
+#define DELEGATIONIDMISMATCH_FAULT        		DelegationIdMismatchFault
+#define UNION_JOBSTATUSRESULT_DATEMISMATCH		SOAP_UNION__CREAMTYPES__union_JobStatusResult_DateMismatchFault     
+#define DATEMISMATCH_FAULT				DateMismatchFault
+#define UNION_JOBSTATUSRESULT_LEASEIDMISMATCH		SOAP_UNION__CREAMTYPES__union_JobStatusResult_LeaseIdMismatchFault  
+#define LEASEIDMISMATCH_FAULT				LeaseIdMismatchFault
+#define UNION_JOBSTATUSRESULT_GENERIC			SOAP_UNION__CREAMTYPES__union_JobStatusResult_GenericFault  
+#define GENERIC_FAULT					GenericFault
+
+#else
+
+#define UNION_JOBSTATUSRESULT_JOBSTSATUS		SOAP_UNION__CREAMTYPES__union_JobStatusResult_jobStatus
+#define JOBSTATUS			 		jobStatus
+#define UNION_JOBSTATUSRESULT_JOBUNKNOWN		SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__JobUnknownFault       
+#define JOBUNKNOWN_FAULT				CREAMTYPES__JobUnknownFault
+#define UNION_JOBSTATUSRESULT_JOBSTATUSINVALID		SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__JobStatusInvalidFault 
+#define JOBSTATUSINVALID_FAULT				CREAMTYPES__JobStatusInvalidFault
+#define UNION_JOBSTATUSRESULT_DELEGATIONIDMISMATCH	SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__DelegationIdMismatchFault     
+#define DELEGATIONIDMISMATCH_FAULT        		CREAMTYPES__DelegationIdMismatchFault
+#define UNION_JOBSTATUSRESULT_DATEMISMATCH		SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__DateMismatchFault     
+#define DATEMISMATCH_FAULT				CREAMTYPES__DateMismatchFault
+#define UNION_JOBSTATUSRESULT_LEASEIDMISMATCH		SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__LeaseIdMismatchFault  
+#define LEASEIDMISMATCH_FAULT				CREAMTYPES__LeaseIdMismatchFault
+#define UNION_JOBSTATUSRESULT_GENERIC			SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__GenericFault  
+#define GENERIC_FAULT					CREAMTYPES__GenericFault
+
+#endif
+
+
 //__________________________________________________________________________________
 void processorStatusResult::operator()( const CREAMTYPES__JobStatusResult* jr ) 
 {
@@ -51,9 +88,9 @@ void processorStatusResult::operator()( const CREAMTYPES__JobStatusResult* jr )
   switch( jr->__union_JobStatusResult) {
     
     //------------------------------------------------------------
-  case SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__JobUnknownFault:
-    if( jr->union_JobStatusResult.CREAMTYPES__JobUnknownFault )
-      errMex = ExceptionFactory::makeStringFromFault( jr->union_JobStatusResult.CREAMTYPES__JobUnknownFault );
+  case UNION_JOBSTATUSRESULT_JOBUNKNOWN:
+    if( jr->union_JobStatusResult.JOBUNKNOWN_FAULT )
+      errMex = ExceptionFactory::makeStringFromFault( jr->union_JobStatusResult.JOBUNKNOWN_FAULT );
     else
       errMex = "Error Message Not Available";
     
@@ -62,9 +99,9 @@ void processorStatusResult::operator()( const CREAMTYPES__JobStatusResult* jr )
     break;
     
     //------------------------------------------------------------
-  case SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__JobStatusInvalidFault:
-    if( jr->union_JobStatusResult.CREAMTYPES__JobStatusInvalidFault )
-      errMex = ExceptionFactory::makeStringFromFault( jr->union_JobStatusResult.CREAMTYPES__JobStatusInvalidFault);
+  case UNION_JOBSTATUSRESULT_JOBSTATUSINVALID:
+    if( jr->union_JobStatusResult.JOBSTATUSINVALID_FAULT )
+      errMex = ExceptionFactory::makeStringFromFault( jr->union_JobStatusResult.JOBSTATUSINVALID_FAULT);
     else
       errMex = "Error Message Not Available";
     
@@ -73,9 +110,9 @@ void processorStatusResult::operator()( const CREAMTYPES__JobStatusResult* jr )
     break; 
     
     //------------------------------------------------------------
-  case SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__DelegationIdMismatchFault:
-    if( jr->union_JobStatusResult.CREAMTYPES__DelegationIdMismatchFault )
-      errMex = ExceptionFactory::makeStringFromFault( jr->union_JobStatusResult.CREAMTYPES__DelegationIdMismatchFault);
+  case UNION_JOBSTATUSRESULT_DELEGATIONIDMISMATCH:
+    if( jr->union_JobStatusResult.DELEGATIONIDMISMATCH_FAULT )
+      errMex = ExceptionFactory::makeStringFromFault( jr->union_JobStatusResult.DELEGATIONIDMISMATCH_FAULT );
     else
       errMex = "Error Message Not Available";
     
@@ -84,9 +121,9 @@ void processorStatusResult::operator()( const CREAMTYPES__JobStatusResult* jr )
     break; 
     
     //------------------------------------------------------------
-  case SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__DateMismatchFault:
-    if( jr->union_JobStatusResult.CREAMTYPES__DateMismatchFault )
-      errMex = ExceptionFactory::makeStringFromFault( jr->union_JobStatusResult.CREAMTYPES__DateMismatchFault);
+  case UNION_JOBSTATUSRESULT_DATEMISMATCH:
+    if( jr->union_JobStatusResult.DATEMISMATCH_FAULT )
+      errMex = ExceptionFactory::makeStringFromFault( jr->union_JobStatusResult.DATEMISMATCH_FAULT );
     else
       errMex = "Error Message Not Available";
     
@@ -95,9 +132,9 @@ void processorStatusResult::operator()( const CREAMTYPES__JobStatusResult* jr )
     break; 
     
     //------------------------------------------------------------
-  case SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__GenericFault:
-    if( jr->union_JobStatusResult.CREAMTYPES__GenericFault)
-      errMex = ExceptionFactory::makeStringFromFault( jr->union_JobStatusResult.CREAMTYPES__GenericFault);
+  case UNION_JOBSTATUSRESULT_GENERIC:
+    if( jr->union_JobStatusResult.GENERIC_FAULT)
+      errMex = ExceptionFactory::makeStringFromFault( jr->union_JobStatusResult.GENERIC_FAULT );
     else
       errMex = "Error Message Not Available";
     
@@ -106,9 +143,9 @@ void processorStatusResult::operator()( const CREAMTYPES__JobStatusResult* jr )
     break;
     
     //------------------------------------------------------------
-  case SOAP_UNION__CREAMTYPES__union_JobStatusResult_CREAMTYPES__LeaseIdMismatchFault:
-    if( jr->union_JobStatusResult.CREAMTYPES__LeaseIdMismatchFault )
-      errMex = ExceptionFactory::makeStringFromFault( jr->union_JobStatusResult.CREAMTYPES__LeaseIdMismatchFault);
+  case UNION_JOBSTATUSRESULT_LEASEIDMISMATCH:
+    if( jr->union_JobStatusResult.LEASEIDMISMATCH_FAULT )
+      errMex = ExceptionFactory::makeStringFromFault( jr->union_JobStatusResult.LEASEIDMISMATCH_FAULT );
     else
       errMex = "Error Message Not Available";
     
@@ -171,7 +208,7 @@ void CreamProxy_Status::execute( const string& serviceAddress, const bool ignore
       
     } else {
     
-    m_target->clear();
+    //m_target->clear();
     processorStatusResult _processorResult(m_target);
     
     for_each( resp.result.begin(), resp.result.end(), _processorResult);
