@@ -59,9 +59,9 @@ execute_process(COMMAND soapcpp2 -v
 execute_process(COMMAND echo ${GSOAP_DISCLAIMER}
                 COMMAND grep -Eo [0-9]+\\.[0-9]+\\.[0-9]+
                 OUTPUT_VARIABLE GSOAP_FULL_VERSION)
-if( GSOAP_FULL_VERSION VERSION_EQUAL "2.7.13" )
+if( GSOAP_FULL_VERSION VERSION_EQUAL "2.7.16" )
     add_definitions( -DSL6 )
-endif( GSOAP_FULL_VERSION VERSION_EQUAL "2.7.13" )
+endif( GSOAP_FULL_VERSION VERSION_EQUAL "2.7.16" )
 
 # workaround for deb7
 #add_definitions( -D_GLIBCXX__PTHREADS )
