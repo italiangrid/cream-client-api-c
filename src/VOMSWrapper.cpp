@@ -29,6 +29,9 @@ END LICENSE */
 #include <openssl/pem.h>
 #include <cerrno>
 #include "glite/ce/cream-client-api-c/creamApiLogger.h"
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -49,7 +52,25 @@ VOMSWrapper::VOMSWrapper( const std::string& pxfile, const bool verify_ac_sign )
   boost::recursive_mutex::scoped_lock M( s_mutex );
 
   m_isValid = false;
-  
+
+  struct stat sbuf;
+
+  int res_stat = stat( pxfile.c_str(), &sbuf);
+
+  if(res_stat) {
+    m_errorMessage = "Unable to open the file [";
+    m_errorMessage += pxfile + "] for stat: " + strerror( errno );
+    m_errorNum = FILE_NOT_FOUND;
+    return;
+  }
+ 
+  if(sbuf.st_uid != ::getuid( ) ) {
+     m_errorMessage = "The owner of the file [";
+     m_errorMessage += pxfile + "] is not you!";
+     m_errorNum = FILE_NOT_FOUND;
+     return;
+  }	
+ 
   FILE* certIN;
 
   int saveerr;
