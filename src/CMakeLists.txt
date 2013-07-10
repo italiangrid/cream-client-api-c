@@ -47,7 +47,7 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(GSOAP gsoapssl++)
 pkg_check_modules(LOG4CPP log4cpp)
 pkg_check_modules(VOMS voms-2.0)
-pkg_check_modules(GRIDSITE_OPENSSL emi-gridsite-openssl)
+pkg_check_modules(GRIDSITE_OPENSSL gridsite-openssl)
 pkg_check_modules(CLASSAD emi-classad-ns)
 pkg_check_modules(GLOBUS_GSSAPI_GSI globus-gssapi-gsi)
 
