@@ -194,7 +194,9 @@ static void mpcerror(FILE *debugfp, char *msg)
 #ifndef GRST_BACKDATE_SECONDS
 #define GRST_BACKDATE_SECONDS 300
 #endif
-
+/*
+ * TODO verify if it is still useful
+ */
 /// Make a GSI Proxy chain from a request, certificate and private key
 int glite::ce::cream_client_api::certUtil::GRSTx509MakeProxyCert_local(char **proxychain, FILE *debugfp, 
                           char *reqtxt, char *cert, char *key, int minutes)

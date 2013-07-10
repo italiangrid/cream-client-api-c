@@ -25,7 +25,9 @@ END LICENSE */
 #include "glite/ce/cream-client-api-c/VOMSWrapper.h"
 #include "glite/ce/cream-client-api-c/certUtil.h"
 #include "glite/ce/cream-client-api-c/creamApiLogger.h"
-
+extern "C" {
+#include "gridsite.h"
+}
 #include <ctime>
 
 using namespace std;
@@ -92,7 +94,7 @@ void CreamProxy_ProxyRenew::execute(const string& serviceURL, const bool ignore_
        }
        time_t timeleft = V.getProxyTimeEnd() - time(NULL);
 
-      if (certUtil::GRSTx509MakeProxyCert_local(&certtxt,
+      if (GRSTx509MakeProxyCert(&certtxt,
 						stderr,
 						(char*)proxyReqResp._renewProxyReqReturn.c_str(),
 						(char*)m_certfile.c_str(),
