@@ -47,7 +47,7 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(GSOAP gsoapssl++)
 pkg_check_modules(LOG4CPP log4cpp)
 pkg_check_modules(VOMS voms-2.0)
-pkg_check_modules(GRIDSITE_OPENSSL emi-gridsite-openssl)
+pkg_check_modules(GRIDSITE_OPENSSL gridsite-openssl)
 pkg_check_modules(CLASSAD emi-classad-ns)
 pkg_check_modules(GLOBUS_GSSAPI_GSI globus-gssapi-gsi)
 
@@ -59,9 +59,12 @@ execute_process(COMMAND soapcpp2 -v
 execute_process(COMMAND echo ${GSOAP_DISCLAIMER}
                 COMMAND grep -Eo [0-9]+\\.[0-9]+\\.[0-9]+
                 OUTPUT_VARIABLE GSOAP_FULL_VERSION)
-if( GSOAP_FULL_VERSION VERSION_GREATER "2.7.13" )
+if( GSOAP_FULL_VERSION VERSION_EQUAL "2.7.16" )
     add_definitions( -DSL6 )
-endif( GSOAP_FULL_VERSION VERSION_GREATER "2.7.13" )
+endif( GSOAP_FULL_VERSION VERSION_EQUAL "2.7.16" )
+
+# workaround for deb7
+#add_definitions( -D_GLIBCXX__PTHREADS )
 
 add_definitions( -pipe -DWANT_NAMESPACES -DWANT_CLASSAD_NAMESPACE )
 
