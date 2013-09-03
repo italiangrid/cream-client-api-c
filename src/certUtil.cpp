@@ -64,7 +64,7 @@ ASN1_TIME *glite::ce::cream_client_api::certUtil::convtime(const std::string& da
 }
 
 
-
+/*
 //______________________________________________________________________________
 time_t glite::ce::cream_client_api::certUtil::stillvalid_old(ASN1_TIME *ctm)
 {
@@ -176,6 +176,7 @@ time_t glite::ce::cream_client_api::certUtil::stillvalid_old(ASN1_TIME *ctm)
 
   return newtime;
 }
+*/
 
 //______________________________________________________________________________
 time_t glite::ce::cream_client_api::certUtil::stillvalid(ASN1_TIME *ctm)
