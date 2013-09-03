@@ -63,7 +63,8 @@ if( GSOAP_FULL_VERSION VERSION_GREATER "2.7.13" )
     add_definitions( -DSL6 )
 endif( GSOAP_FULL_VERSION VERSION_GREATER "2.7.13" )
 
-add_definitions( -pipe -DWANT_NAMESPACES -DWANT_CLASSAD_NAMESPACE )
+add_definitions( -pipe -DWANT_NAMESPACES -DWANT_CLASSAD_NAMESPACE
+-DHAVE_TIMEGM)
 
 link_directories(${VOMS_LIBRARY_DIRS}
                  ${GSOAP_LIBRARY_DIRS}
