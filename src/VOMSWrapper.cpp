@@ -231,7 +231,9 @@ void VOMSWrapper::timeEnd( void ) throw(auth_ex&)
   //m_cert_time_end = certUtil::ASN1_UTCTIME_get( X509_get_notAfter(x) ) ;
   m_cert_time_end = certUtil::ASN1_UTCTIME_get( X509_get_notAfter(x) ) ;
   m_ca_time_end   = certUtil::stillvalid(after);
-  
+ 
+  ASN1_TIME_free( after );
+ 
   m_proxyTimeEnd = (m_cert_time_end > m_ca_time_end ? m_ca_time_end : m_cert_time_end);
 
 }

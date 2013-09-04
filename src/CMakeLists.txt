@@ -66,7 +66,8 @@ endif( GSOAP_FULL_VERSION VERSION_EQUAL "2.7.16" )
 # workaround for deb7
 #add_definitions( -D_GLIBCXX__PTHREADS )
 
-add_definitions( -pipe -DWANT_NAMESPACES -DWANT_CLASSAD_NAMESPACE )
+add_definitions( -pipe -DWANT_NAMESPACES -DWANT_CLASSAD_NAMESPACE
+-DHAVE_TIMEGM)
 
 link_directories(${VOMS_LIBRARY_DIRS}
                  ${GSOAP_LIBRARY_DIRS}

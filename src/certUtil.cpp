@@ -47,7 +47,7 @@ ASN1_TIME *glite::ce::cream_client_api::certUtil::convtime(const std::string& da
 {
   ASN1_TIME *t= ASN1_TIME_new();
 
-  t->data   = (unsigned char *)(data.data());
+  t->data   = (unsigned char *)strdup(data.data());
   t->length = data.size();
   switch(t->length) {
   case 10:
@@ -64,9 +64,9 @@ ASN1_TIME *glite::ce::cream_client_api::certUtil::convtime(const std::string& da
 }
 
 
-
+/*
 //______________________________________________________________________________
-time_t glite::ce::cream_client_api::certUtil::stillvalid(ASN1_TIME *ctm)
+time_t glite::ce::cream_client_api::certUtil::stillvalid_old(ASN1_TIME *ctm)
 {
   char     *str;
   time_t    offset;
@@ -176,7 +176,114 @@ time_t glite::ce::cream_client_api::certUtil::stillvalid(ASN1_TIME *ctm)
 
   return newtime;
 }
+*/
 
+//______________________________________________________________________________
+time_t glite::ce::cream_client_api::certUtil::stillvalid(ASN1_TIME *ctm)
+{
+  char     *str;
+  time_t    offset;
+  time_t    newtime;
+  char      buff1[32];
+  char     *p;
+  int       i;
+  struct tm tm;
+  int       size = 0;
+
+  switch (ctm->type) {
+  case V_ASN1_UTCTIME:
+    size=10;
+    break;
+  case V_ASN1_GENERALIZEDTIME:
+    size=12;
+    break;
+  }
+  p = buff1;
+  i = ctm->length;
+  str = (char *)ctm->data;
+  if ((i < 11) || (i > 17)) {
+    return 0;
+  }
+  memcpy(p,str,size);
+  p += size;
+  str += size;
+
+  if ((*str == 'Z') || (*str == '-') || (*str == '+')) {
+    *(p++)='0'; *(p++)='0';
+  }
+  else {
+    *(p++)= *(str++); *(p++)= *(str++);
+  }
+  *(p++) = 'Z';
+  *p = '\0';
+
+  if (*str == 'Z') {
+    offset=0;
+  }
+  else {
+    if ((*str != '+') && (str[5] != '-')) {
+      return 0;
+    }
+    offset=((str[1]-'0')*10+(str[2]-'0'))*60;
+    offset+=(str[3]-'0')*10+(str[4]-'0');
+    if (*str == '-') {
+      offset=-offset;
+    }
+  }
+
+  tm.tm_isdst = 0;
+  int index = 0;
+  if (ctm->type == V_ASN1_UTCTIME) {
+    tm.tm_year  = (buff1[index++]-'0')*10;
+    tm.tm_year += (buff1[index++]-'0');
+  }
+  else {
+    tm.tm_year  = (buff1[index++]-'0')*1000;
+    tm.tm_year += (buff1[index++]-'0')*100;
+    tm.tm_year += (buff1[index++]-'0')*10;
+    tm.tm_year += (buff1[index++]-'0');
+  }
+
+  if (tm.tm_year < 70) {
+    tm.tm_year+=100;
+  }
+
+  if (tm.tm_year > 1900) {
+    tm.tm_year -= 1900;
+  }
+
+  tm.tm_mon   = (buff1[index++]-'0')*10;
+  tm.tm_mon  += (buff1[index++]-'0')-1;
+  tm.tm_mday  = (buff1[index++]-'0')*10;
+  tm.tm_mday += (buff1[index++]-'0');
+  tm.tm_hour  = (buff1[index++]-'0')*10;
+  tm.tm_hour += (buff1[index++]-'0');
+  tm.tm_min   = (buff1[index++]-'0')*10;
+  tm.tm_min  += (buff1[index++]-'0');
+  tm.tm_sec   = (buff1[index++]-'0')*10;
+  tm.tm_sec  += (buff1[index]-'0');
+
+  /*
+ *    * mktime assumes local time, so subtract off
+ *       * timezone, which is seconds off of GMT. first
+ *          * we need to initialize it with tzset() however.
+ *             */
+
+  tzset();
+#if defined(HAVE_TIMEGM)
+  newtime = (timegm(&tm) + offset*60*60);
+#elif defined(HAVE_TIME_T_TIMEZONE)
+  newtime = (mktime(&tm) + offset*60*60 - timezone);
+#elif defined(HAVE_TIME_T__TIMEZONE)
+  newtime = (mktime(&tm) + offset*60*60 - _timezone);
+#else
+  newtime = (mktime(&tm) + offset*60*60);
+#endif
+
+  return newtime;
+}
+
+//______________________________________________________________________________
 static void mpcerror(FILE *debugfp, char *msg)
 {
   if (debugfp != NULL)
@@ -194,9 +301,7 @@ static void mpcerror(FILE *debugfp, char *msg)
 #ifndef GRST_BACKDATE_SECONDS
 #define GRST_BACKDATE_SECONDS 300
 #endif
-/*
- * TODO verify if it is still useful
- */
+
 /// Make a GSI Proxy chain from a request, certificate and private key
 int glite::ce::cream_client_api::certUtil::GRSTx509MakeProxyCert_local(char **proxychain, FILE *debugfp, 
                           char *reqtxt, char *cert, char *key, int minutes)
