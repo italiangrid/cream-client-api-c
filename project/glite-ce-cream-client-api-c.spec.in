@@ -79,7 +79,11 @@ The package contains development files for the client of the CREAM service
 
 
 %changelog
-* Fri Aug 31 2012 CREAM group <cream-support@lists.infn.it> - @PKGVERSION@-@PKGRELEASE@
+* Mon Sep 30 2013 CREAM group <cream-support@lists.infn.it> - @PKGVERSION@-@PKGRELEASE@
+- Fix for bug https://issues.infn.it/jira/browse/CREAM-123
+- Fix for vulnerability
+
+* Fri Aug 31 2012 CREAM group <cream-support@lists.infn.it> - 1.15.2-2
 - New major release
 
 
