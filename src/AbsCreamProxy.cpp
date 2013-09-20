@@ -217,15 +217,15 @@ void AbsCreamProxy::makeSoap( void ) throw(soap_ex&, soap_runtime_ex&, auth_ex&)
     
 
     
-//    if( m_use_soap_header ) {
+    if( m_use_soap_header ) {
       /**
        * POSSIBLE MEM LEAK? When a response is received
        * it seems that the field SOAP->header is set to NULL by
        * the gSOAP runtime
        */
-//      m_soap->header = new SOAP_ENV__Header(); // FIXME how to free this (see comment above) ?
-//      m_soap->header->CREAMTYPES__iceId = new string( m_soap_header );
-//    }
+      m_soap->header = new SOAP_ENV__Header(); // FIXME how to free this (see comment above) ?
+      m_soap->header->CREAMTYPES__iceId = new string( m_soap_header );
+    }
   } catch(exception& ex) {
 
     this->clearSoap();// if an exception is thrown the initSoap object is not created
@@ -258,7 +258,7 @@ void AbsCreamProxy::clearSoap( void )
 	m_ctx = NULL;
       }
     }
-/*
+
     if(m_use_soap_header) { 
       if(m_soap->header) {
         if(m_soap->header->CREAMTYPES__iceId)
@@ -267,7 +267,7 @@ void AbsCreamProxy::clearSoap( void )
 	m_soap->header = NULL; 
       }
     }
-  */  
+    
     free(m_soap);
     m_soap = NULL;
   }
