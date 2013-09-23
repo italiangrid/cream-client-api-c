@@ -20,6 +20,8 @@ END LICENSE */
 
 #include "glite/ce/cream-client-api-c/EventWrapper.h"
 #include "glite/ce/cream-client-api-c/CreamProxy_Impl.h"
+#include "glite/ce/cream-client-api-c/creamApiLogger.h"
+
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/lexical_cast.hpp>
@@ -136,7 +138,11 @@ void CreamProxy_QueryEvent::execute(const string& serviceURL, const bool ignore_
     
       ExceptionFactory::raiseException(m_soap, ignore_tag_mismatch);
     } else {
-    
+   
+    CREAM_SAFE_LOG(*m_log_dev << log4cpp::Priority::WARN
+                     << "CreamProxy_QueryEvent::execute() - "
+                     << "CREAM RETURNED DB_ID IN EventQuery=[" << result.dbId << "] FOR CE ["<< serviceURL << "]");
+ 
     (*m_time_t)      = result.queryExecutionTimeInMillis;
     (*m_database_id) = result.dbId;
 
