@@ -22,7 +22,7 @@ cmake_minimum_required(VERSION 2.6)
 
 set(PKGNAME glite-ce-cream-client-api-c)
 set(PKGVER 1.15.3)
-set(PKGREL 1)
+set(PKGREL 2)
 
 set(ITEMS_FOR_SOURCE CMakeLists.txt interface src)
 
