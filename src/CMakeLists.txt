@@ -84,7 +84,7 @@ add_custom_command(OUTPUT ${AUTODIR}/CREAM_CLIENTClient.cpp ${AUTODIR}/CREAM_CLI
                    DEPENDS ${WSDL_PATH}/org.glite.ce-cream2_service.wsdl 
                            ${WSDL_PATH}/www.gridsite.org-delegation-2.0.0.wsdl
                    COMMAND mkdir -p ${AUTODIR}/glite/ce/cream-client-api-c
-                   COMMAND wsdl2h -o ${AUTODIR}/glite/ce/cream-client-api-c/cream_service.h 
+                   COMMAND wsdl2h -k -o ${AUTODIR}/glite/ce/cream-client-api-c/cream_service.h 
                                   -t ${CMAKE_CURRENT_SOURCE_DIR}/typemap.dat
                                   ${WSDL_PATH}/org.glite.ce-cream2_service.wsdl 
                                   ${WSDL_PATH}/www.gridsite.org-delegation-2.0.0.wsdl
