@@ -21,7 +21,7 @@ project(cream-client-api-c CXX)
 cmake_minimum_required(VERSION 2.6)
 
 set(PKGNAME glite-ce-cream-client-api-c)
-set(PKGVER 1.14.3)
+set(PKGVER 1.14.4)
 set(PKGREL 1)
 
 set(ITEMS_FOR_SOURCE CMakeLists.txt interface src)
