@@ -42,7 +42,7 @@ namespace glite {
 	  std::string  m_errorcode;
 	  std::string  m_description;
 	  std::string  m_faultcause;
-	  std::string  m_whatinfo;
+	  mutable std::string  m_whatinfo;
 	  time_t       m_timestamp;
 	  
 	public:
@@ -64,7 +64,7 @@ namespace glite {
 	    concatenation of the pieces of information returned by the method getDescription(), getMethodName(), getErrorCode(), getFaultCause(),
 	    getTimeStamp()
 	   */
-	  virtual const char* what()  throw() { 
+	  virtual const char* what() const throw() { 
 	    char timestamp[40]; 
 	    struct tm TSTAMP;
 	    memset((void*)timestamp, 0, 40); 
@@ -72,22 +72,22 @@ namespace glite {
 	    strftime(timestamp, sizeof(timestamp), "%a %d %b %Y %T", &TSTAMP);
 
 	  
-	      m_whatinfo = "MethodName=[";
-	      m_whatinfo += m_methodname;
-	      m_whatinfo += "] ErrorCode=[";
-	      m_whatinfo += m_errorcode;
-	      m_whatinfo += "] Description=[";
-	      m_whatinfo += m_description;
-	      m_whatinfo += "] FaultCause=[";
-	      m_whatinfo += m_faultcause;
-	      m_whatinfo += "] Timestamp=[";
-	      try {
-	        m_whatinfo += boost::lexical_cast<std::string>( timestamp );
-	      } catch(exception& ex) {
-	        m_whatinfo += "Not available due to a cast error: ";
-		m_whatinfo += ex.what();
-	      }
-	      m_whatinfo += "]";
+	    m_whatinfo = "MethodName=[";
+	    m_whatinfo += m_methodname;
+	    m_whatinfo += "] ErrorCode=[";
+	    m_whatinfo += m_errorcode;
+	    m_whatinfo += "] Description=[";
+	    m_whatinfo += m_description;
+	    m_whatinfo += "] FaultCause=[";
+	    m_whatinfo += m_faultcause;
+	    m_whatinfo += "] Timestamp=[";
+	    try {
+	      m_whatinfo += boost::lexical_cast<std::string>( timestamp );
+	    } catch(exception& ex) {
+	      m_whatinfo += "Not available due to a cast error: ";
+       	      m_whatinfo += ex.what();
+	    }
+	    m_whatinfo += "]";
 	      
 	  
 	    
