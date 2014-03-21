@@ -80,6 +80,9 @@ The package contains development files for the client of the CREAM service
 
 %changelog
 * Mon Sep 30 2013 CREAM group <cream-support@lists.infn.it> - @PKGVERSION@-@PKGRELEASE@
+- Fix for bug https://issues.infn.it/jira/browse/CREAM-137
+
+* Mon Sep 30 2013 CREAM group <cream-support@lists.infn.it> - 1.15.3-3
 - Fix for bug https://issues.infn.it/jira/browse/CREAM-123
 - Fix for vulnerability
 
