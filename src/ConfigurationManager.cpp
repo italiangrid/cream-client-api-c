@@ -150,7 +150,11 @@ void util::ConfigurationManager::load(const char* filename)
 
 //       else throw util::file_ex(strerror(saveerr));
 //     }
+#ifdef NEWBOOSTFS
+  if(!boost::filesystem::exists( boost::filesystem::path(filename).native() ))
+#else
   if(!boost::filesystem::exists( boost::filesystem::path(filename, boost::filesystem::native) ))
+#endif
     throw util::file_ex( string("file")+ filename + " doest not exist");
   
   ifstream input( filename );

@@ -169,15 +169,22 @@ void AbsCreamProxy::makeSoap( void ) throw(soap_ex&, soap_runtime_ex&, auth_ex&)
 	 */
 	throw auth_ex("gsplugin initialization failed");
       }
-      
-      
+
+#ifdef NEWBOOSTFS      
+      if(!boost::filesystem::exists( boost::filesystem::path(m_certfile).native() ) ) {
+#else
       if(!boost::filesystem::exists( boost::filesystem::path(m_certfile, boost::filesystem::native ) ) ) {
+#endif
 	glite_gsplugin_free_context( m_ctx );
 	m_ctx = NULL;
 	throw auth_ex("Missing certificate file [" + m_certfile + "]");
       }
-	  
+	 
+#ifdef NEWBOOSTFS 
+      if(!boost::filesystem::exists( boost::filesystem::path(m_keyfile).native() ) ) {
+#else
       if(!boost::filesystem::exists( boost::filesystem::path(m_keyfile, boost::filesystem::native ) ) ) {
+#endif
 	glite_gsplugin_free_context( m_ctx );
 	m_ctx = NULL;
 	throw auth_ex("Missing key file [" + m_keyfile + "]");

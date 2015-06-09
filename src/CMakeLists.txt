@@ -64,6 +64,10 @@ if( NOT GSOAP_FULL_VERSION VERSION_LESS "2.7.16" )
     add_definitions( -DSL6 )
 endif( NOT GSOAP_FULL_VERSION VERSION_LESS "2.7.16" )
 
+if( NOT Boost_VERSION VERSION_LESS "1.48.0" )
+    add_definitions( -DNEWBOOSTFS )
+endif( NOT Boost_VERSION VERSION_LESS "1.48.0" )
+
 # workaround for deb7
 #add_definitions( -D_GLIBCXX__PTHREADS )
 
