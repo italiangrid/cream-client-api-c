@@ -19,12 +19,13 @@
 
 project(cream-client-api-c CXX)
 cmake_minimum_required(VERSION 2.6)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake_modules/")
 
 set(PKGNAME glite-ce-cream-client-api-c)
 set(PKGVER 1.15.4)
 set(PKGREL 2)
 
-set(ITEMS_FOR_SOURCE CMakeLists.txt interface src)
+set(ITEMS_FOR_SOURCE CMakeLists.txt interface src cmake_modules)
 
 add_custom_target(rpm 
                   COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild/BUILD
@@ -46,3 +47,5 @@ endif(DEFINED SL6)
 
 add_subdirectory(src)
 add_subdirectory(interface)
+add_subdirectory(cmake_modules)
+

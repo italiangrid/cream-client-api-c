@@ -47,9 +47,10 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(GSOAP gsoapssl++)
 pkg_check_modules(LOG4CPP log4cpp)
 pkg_check_modules(VOMS voms-2.0)
-pkg_check_modules(GRIDSITE_OPENSSL gridsite-openssl)
-pkg_check_modules(CLASSAD emi-classad-ns)
 pkg_check_modules(GLOBUS_GSSAPI_GSI globus-gssapi-gsi)
+
+find_package(GLiteClassAd REQUIRED)
+find_package(GLiteGridsite REQUIRED)
 
 set(Boost_USE_MULTITHREADED ON)
 find_package( Boost COMPONENTS date_time filesystem regex thread)
@@ -59,21 +60,20 @@ execute_process(COMMAND soapcpp2 -v
 execute_process(COMMAND echo ${GSOAP_DISCLAIMER}
                 COMMAND grep -Eo [0-9]+\\.[0-9]+\\.[0-9]+
                 OUTPUT_VARIABLE GSOAP_FULL_VERSION)
-if( GSOAP_FULL_VERSION VERSION_EQUAL "2.7.16" )
+if( NOT GSOAP_FULL_VERSION VERSION_LESS "2.7.16" )
     add_definitions( -DSL6 )
-endif( GSOAP_FULL_VERSION VERSION_EQUAL "2.7.16" )
+endif( NOT GSOAP_FULL_VERSION VERSION_LESS "2.7.16" )
 
 # workaround for deb7
 #add_definitions( -D_GLIBCXX__PTHREADS )
 
-add_definitions( -pipe -DWANT_NAMESPACES -DWANT_CLASSAD_NAMESPACE
--DHAVE_TIMEGM)
+add_definitions( -pipe ${ClassAd_CXX_FLAGS} ${ClassAd_CPP_FLAGS} -DHAVE_TIMEGM)
 
 link_directories(${VOMS_LIBRARY_DIRS}
-                 ${GSOAP_LIBRARY_DIRS}
-                 ${GRIDSITE_OPENSSL_LIBRARY_DIRS})
+                 ${GSOAP_LIBRARY_DIRS})
 
-include_directories(${CLASSAD_INCLUDE_DIRS}
+include_directories(${ClassAd_INCLUDE_DIR}
+                    ${GRIDSITE_INCLUDE_DIRS}
                     ${VOMS_INCLUDE_DIRS}
                     ${GSOAP_INCLUDE_DIRS}
                     ${LOG4CPP_INCLUDE_DIRS}

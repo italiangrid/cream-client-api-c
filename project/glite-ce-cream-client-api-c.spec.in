@@ -8,7 +8,7 @@ URL: http://glite.cern.ch/
 Group: System Environment/Libraries
 BuildArch: %{_arch}
 BuildRequires: cmake, chrpath
-BuildRequires: glite-ce-wsdl, emi-pkgconfig-compat, gsoap-devel
+BuildRequires: glite-ce-wsdl, gsoap-devel
 BuildRequires: gridsite-devel, libxml2-devel, boost-devel
 BuildRequires: voms-devel, classads-devel
 BuildRequires: glite-lbjp-common-gsoap-plugin-devel, log4cpp-devel
@@ -76,6 +76,7 @@ The package contains development files for the client of the CREAM service
 /usr/include/glite/ce/cream-client-api-c/*.nsmap
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/libglite_ce_cream_client_*.so
+/usr/share/cmake/Modules/Find*.cmake
 
 
 %changelog
