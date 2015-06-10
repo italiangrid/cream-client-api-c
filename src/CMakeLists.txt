@@ -137,11 +137,11 @@ add_library(glite_ce_cream_client_soap SHARED ${AUTODIR}/CREAM_CLIENTClient.cpp
 
 set_target_properties(glite_ce_cream_client_soap PROPERTIES VERSION 0.0.0 SOVERSION 0)
 
-target_link_libraries(glite_ce_cream_client_soap ${CLASSAD_LIBRARIES}
+target_link_libraries(glite_ce_cream_client_soap ${ClassAd_LIBRARY}
                                                  ${VOMS_LIBRARIES}
                                                  ${GSOAP_LIBRARIES}
                                                  ${LOG4CPP_LIBRARIES}
-                                                 ${GRIDSITE_OPENSSL_LIBRARIES}
+                                                 ${GRIDSITE_LIBRARIES}
                                                  ${Boost_LIBRARIES})
 
 
@@ -155,11 +155,11 @@ add_library(glite_ce_cream_client_util SHARED CEUrl.cpp
 
 set_target_properties(glite_ce_cream_client_util PROPERTIES VERSION 0.0.0 SOVERSION 0)
 
-target_link_libraries(glite_ce_cream_client_util ${CLASSAD_LIBRARIES}
+target_link_libraries(glite_ce_cream_client_util ${ClassAd_LIBRARY}
                                                  ${VOMS_LIBRARIES}
                                                  ${GSOAP_LIBRARIES}
                                                  ${LOG4CPP_LIBRARIES}
-                                                 ${GRIDSITE_OPENSSL_LIBRARIES}
+                                                 ${GRIDSITE_LIBRARIES}
                                                  ${Boost_LIBRARIES})
 
 install(TARGETS glite_ce_cream_client_soap glite_ce_cream_client_util
