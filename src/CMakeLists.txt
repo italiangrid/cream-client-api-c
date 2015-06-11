@@ -53,7 +53,11 @@ find_package(GLiteClassAd REQUIRED)
 find_package(GLiteGridsite REQUIRED)
 
 set(Boost_USE_MULTITHREADED ON)
+set(Boost_NO_BOOST_CMAKE ON)
 find_package( Boost COMPONENTS date_time filesystem regex thread)
+if( NOT Boost_VERSION LESS "104800" )
+    add_definitions( -DNEWBOOSTFS )
+endif( NOT Boost_VERSION LESS "104800" )
 
 execute_process(COMMAND soapcpp2 -v
                 ERROR_VARIABLE GSOAP_DISCLAIMER)
@@ -63,10 +67,6 @@ execute_process(COMMAND echo ${GSOAP_DISCLAIMER}
 if( NOT GSOAP_FULL_VERSION VERSION_LESS "2.7.16" )
     add_definitions( -DSL6 )
 endif( NOT GSOAP_FULL_VERSION VERSION_LESS "2.7.16" )
-
-if( NOT Boost_VERSION VERSION_LESS "1.48.0" )
-    add_definitions( -DNEWBOOSTFS )
-endif( NOT Boost_VERSION VERSION_LESS "1.48.0" )
 
 # workaround for deb7
 #add_definitions( -D_GLIBCXX__PTHREADS )
