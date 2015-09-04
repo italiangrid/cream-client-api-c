@@ -10,7 +10,16 @@ BuildArch: %{_arch}
 BuildRequires: cmake, chrpath
 BuildRequires: glite-ce-wsdl, gsoap-devel
 BuildRequires: gridsite-devel, libxml2-devel, boost-devel
-BuildRequires: voms-devel, classads-devel
+BuildRequires: voms-devel
+%if 0%{?el5}
+BuildRequires: classads-devel
+%else
+%if 0%{?el6}
+BuildRequires: classads-devel
+%else
+BuildRequires: condor-classads-devel
+%endif
+%endif
 BuildRequires: glite-lbjp-common-gsoap-plugin-devel, log4cpp-devel
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 AutoReqProv: yes
@@ -61,7 +70,16 @@ Group: System Environment/Libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: glite-jobid-api-cpp-devel, glite-jobid-api-c-devel,
 Requires: glite-lbjp-common-gsoap-plugin-devel
-Requires: boost-devel, classads-devel, log4cpp-devel, gsoap-devel
+Requires: boost-devel, log4cpp-devel, gsoap-devel
+%if 0%{?el5}
+Requires: classads-devel
+%else
+%if 0%{?el6}
+Requires: classads-devel
+%else
+Requires: condor-classads-devel
+%endif
+%endif
 Requires: voms-devel, gridsite-devel, libxml2-devel
 
 %description -n glite-ce-cream-client-devel
